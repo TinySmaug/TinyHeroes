@@ -1,8 +1,7 @@
 #include "Animation.h"
 
-Animation::Animation(float switchTime)
+Animation::Animation()
 {
-	this->switchTime = switchTime;
 	totalTime = 0.0f;
 	currentImage = 0;
 }
@@ -11,18 +10,23 @@ Animation::~Animation()
 {
 }
 
-void Animation::update(unsigned int animationRow, unsigned int imageCount, float deltaTime, bool faceRight)
+void Animation::update(float deltaTime)
 {
-	uvRect.width = animationTextures[animationRow].getSize().x / static_cast<float>(imageCount);
-	uvRect.height = animationTextures[animationRow].getSize().y;
+	uvRect.width = animationTextures[info.animationIndex].getSize().x / static_cast<float>(info.imageCount);
+	uvRect.height = animationTextures[info.animationIndex].getSize().y;
 	totalTime += deltaTime;
 
-	if (totalTime >= switchTime)
+	if (currentImage >= info.imageCount)
 	{
-		totalTime -= switchTime;
+		currentImage = 0;
+	}
+
+	if (totalTime >= info.switchTime)
+	{
+		totalTime -= info.switchTime;
 		currentImage++;
 
-		if (currentImage >= imageCount)
+		if (currentImage >= info.imageCount)
 		{
 			currentImage = 0;
 		}
@@ -30,7 +34,7 @@ void Animation::update(unsigned int animationRow, unsigned int imageCount, float
 
 	uvRect.top = 0;
 
-	if (faceRight)
+	if (info.faceRight)
 	{
 		uvRect.left = currentImage * uvRect.width;
 		uvRect.width = abs(uvRect.width);

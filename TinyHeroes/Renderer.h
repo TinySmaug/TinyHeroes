@@ -10,7 +10,7 @@ class Renderer
 {
 public:
 	void renderObjects();
-	void resizeView();
+	void resize();
 	static Renderer* getInstance();
 	sf::RenderWindow& getWindow();
 	sf::View& getView();

@@ -1,14 +1,16 @@
 #include "PlayerCharacter.h"
 
-#include <iostream>
+//#include <iostream>
 
 PlayerCharacter::PlayerCharacter(std::string texturePath)
-	: Entity(texturePath), animation(0.25f)
+	: Entity(texturePath), animation()
 {
-	faceRight = true;
+	animation.info.faceRight = true;
 	canJump = true;
-	acceleration = 100.0f;
-	maxSpeed = 700.0f;
+	jumping = false;
+	running = false;
+	acceleration = 30.0f;
+	maxSpeed = 300.0f;
 	jumpHeight = 100.0f;
 
 	sf::Texture animationTexture;
@@ -32,108 +34,106 @@ PlayerCharacter::~PlayerCharacter()
 
 void PlayerCharacter::update(float deltaTime)
 {
-	float runningMultiplier =  1.3f;
-	float jumpingMultiplier =  1.5f;
+	float runningSwitchTime = 0.1f;
+	float walkingSwitchTime = 0.25f;
+	float jumpingSwitchTime = 0.2f;
+	float idleSwitchTime = 0.3f;
 
-	velocity.x = 0.0f; //insta stop moving when key isnt pressed
-	//velocity.x *= 0.0f; //slowly stop moving (higher number=slower stop time, lower number=faster stop time)
-
-	bool jumping = false;
+	jumping = false;
 	if (!canJump)
 		jumping = true;
+	running = false;
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-	{
-		velocity.x -= acceleration;
-		animationIndex = 1;
-		imageCount = 6;
-		faceRight = false;
-		if (jumping)
-		{
-			animationIndex = 3;
-			imageCount = 8;
-		}
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-	{
-		velocity.x += acceleration;
-		animationIndex = 1;
-		imageCount = 6;
-		faceRight = true;
-		if (jumping)
-		{
-			animationIndex = 3;
-			imageCount = 8;
-		}
-	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
-	{
-		deltaTime *= runningMultiplier;
-		velocity.x -= acceleration;
-		animationIndex = 2;
-		imageCount = 6;
-		faceRight = false;
-		if (jumping)
-		{
-			animationIndex = 3;
-			imageCount = 8;
-		}
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
-	{
-		deltaTime *= runningMultiplier;
-		velocity.x += acceleration;
-		animationIndex = 2;
-		imageCount = 6;
-		faceRight = true;
-		if (jumping)
-		{
-			animationIndex = 3;
-			imageCount = 8;
-		}
-	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 	{
 		jumping = true;
-		deltaTime *= jumpingMultiplier;
-
 		if (canJump)
 		{
 			canJump = false;
 			//square root( 2.0f * gravity * jumpHeight)
 			velocity.y = -sqrtf(2.0f * 981.0f * jumpHeight);
-			animationIndex = 3;
-			imageCount = 8;
-		}
-	}
-	
-	velocity.y += 981.0f * deltaTime; //adding gravity to go down
-	
-	if (velocity.x == 0.0f)
-	{
-		if (jumping == true)
-		{
-			animationIndex = 3;
-			imageCount = 8;
-		}
-		else
-		{
-			animationIndex = 0;
-			imageCount = 4;
 		}
 	}
 
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	{
+		velocity.x -= acceleration;
+		animation.info.animationIndex = 1;
+		animation.info.imageCount = 6;
+		animation.info.switchTime = walkingSwitchTime;
+		animation.info.faceRight = false;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+		{
+			running = true;
+			velocity.x -= acceleration;
+			animation.info.animationIndex = 2;
+			animation.info.imageCount = 6;
+			animation.info.switchTime = runningSwitchTime;
+		}
+		if (jumping)
+		{
+			animation.info.animationIndex = 3;
+			animation.info.imageCount = 8;
+			animation.info.switchTime = jumpingSwitchTime;
+		}
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	{
+		velocity.x += acceleration;
+		animation.info.animationIndex = 1;
+		animation.info.imageCount = 6;
+		animation.info.switchTime = walkingSwitchTime;
+		animation.info.faceRight = true;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+		{
+			running = true;
+			velocity.x += acceleration;
+			animation.info.animationIndex = 2;
+			animation.info.imageCount = 6;
+			animation.info.switchTime = runningSwitchTime;
+		}
+		if (jumping)
+		{
+			animation.info.animationIndex = 3;
+			animation.info.imageCount = 8;
+			animation.info.switchTime = jumpingSwitchTime;
+		}
+	}
+	else if (jumping)
+	{
+		animation.info.animationIndex = 3;
+		animation.info.imageCount = 8;
+		animation.info.switchTime = jumpingSwitchTime;
+	}
+	else
+	{
+		velocity.x = 0.0f; //insta stop moving when key isnt pressed
+		//velocity.x *= 0.0f; //slowly stop moving (higher number=slower stop time, lower number=faster stop time)
+		
+		animation.info.animationIndex = 0;
+		animation.info.imageCount = 4;
+		animation.info.switchTime = idleSwitchTime;
+	}
+	
+	velocity.y += 981.0f * deltaTime; //adding gravity to go down
+
 	if (abs(velocity.x) > maxSpeed)
 	{
-		velocity.x = maxSpeed * (velocity.x / abs(velocity.x));
+		if (!running)
+		{
+			velocity.x = maxSpeed * (velocity.x / abs(velocity.x));
+		}
+		else
+		{
+			velocity.x = abs(velocity.x) > 2.0f * maxSpeed ? 2.0f * maxSpeed * (velocity.x / abs(velocity.x)) : velocity.x;
+		}
 	}
 	
 	//std::cout << velocity.x << std::endl;
 
-	animation.update(animationIndex, imageCount, deltaTime, faceRight);
+	animation.update(deltaTime);
 	sprite.setTextureRect(animation.uvRect);
-	sprite.setTexture(animation.animationTextures[animationIndex]);
+	sprite.setTexture(animation.animationTextures[animation.info.animationIndex]);
 	sprite.move(velocity * deltaTime);
 
 	//remove after implementing collisions

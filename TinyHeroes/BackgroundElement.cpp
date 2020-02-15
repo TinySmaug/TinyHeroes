@@ -5,61 +5,38 @@
 
 BackgroundElement::BackgroundElement(std::string file, sf::RenderWindow &window)
 {
-	for (int i = 0; i < 7; i++)
-	{
-		std::string path = file;
-		path.append("/").append(std::to_string(i)).append(".png");
+	layerTexture.loadFromFile(file);
 
-		sf::Texture layer;
-		layer.loadFromFile(path);
-		bgTextureLayers.push_back(new sf::Texture(layer));
+	sf::Vector2u bgTextureSize = layerTexture.getSize();
+	sf::Vector2f bgTextureScale(static_cast<float>(window.getSize().x) / bgTextureSize.x,
+								static_cast<float>(window.getSize().y) / bgTextureSize.y);
 
-		sf::Vector2u bgTextureSize = layer.getSize();
-		sf::Vector2f bgTextureScale(static_cast<float>(window.getSize().x) / bgTextureSize.x,
-									static_cast<float>(window.getSize().y) / bgTextureSize.y);
-
-		sf::Sprite background;
-
-		background.setTexture(*bgTextureLayers[i]);
-		background.scale(bgTextureScale);
-		backgrounds.push_back(background);
-	}
+	backgroundLayer.setTexture(layerTexture);
+	backgroundLayer.scale(bgTextureScale);
 }
 
 BackgroundElement::~BackgroundElement()
 {
 }
 
+
 void BackgroundElement::render(sf::RenderWindow & window)
 {
-	for (auto background : backgrounds) 
-	{
-		window.draw(background);
-	}
+	window.draw(backgroundLayer);
+	backgroundLayer.move(-1280.0f, 0.0f);
+	window.draw(backgroundLayer);
+	backgroundLayer.move(2.0f*1280.0f, 0.0f);
+	window.draw(backgroundLayer);
+	backgroundLayer.move(-1280.0f, 0.0f);
 }
 
-void BackgroundElement::update(sf::Vector2f playerVelocity, float deltaTime, sf::RenderWindow & window, sf::View & view)
+void BackgroundElement::resize(sf::RenderWindow & window)
 {
-	float layerMultiplier = 0.9f;
-	float runningMultiplier = 1.3f;
-	float jumpingMultiplier = 1.5f;
-	float velocity = playerVelocity.x / 2.5f;
+}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
-	{
-		deltaTime *= runningMultiplier;
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-	{
-		deltaTime *= jumpingMultiplier;
-	}
-	
-	for (int i = backgrounds.size() - 1; i>=0; i--)
-	{
-		backgrounds[i].move(velocity * deltaTime, 0.0f);
-		velocity *= layerMultiplier;
-	}
-
+void BackgroundElement::update(float velocity, float deltaTime, sf::RenderWindow & window, sf::View & view)
+{
+	backgroundLayer.move(velocity * deltaTime, 0.0f);
 	checkBounds(velocity, deltaTime, window, view);
 }
 
@@ -70,21 +47,13 @@ void BackgroundElement::checkBounds(float velocity, float deltaTime, sf::RenderW
 	float viewCenterX = view.getCenter().x;
 	float leftBound = viewCenterX - 640.0f;
 	float rightBound = viewCenterX + 640.0f;
-	
-	for(int i = 0; i < backgrounds.size(); i++)
+
+	if (backgroundLayer.getPosition().x > rightBound)
 	{
-		if (backgrounds[i].getPosition().x > rightBound)
-		{
-			backgrounds[i].move(-1280.0f, 0.0f);
-		}
-		if (backgrounds[i].getPosition().x < leftBound)
-		{
-			backgrounds[i].move(1280.0f, 0.0f);
-		}
-		backgrounds[i].move(-moveConst, 0.0f);
-		window.draw(backgrounds[i]);
-		backgrounds[i].move(2.0f*moveConst, 0.0f);
-		window.draw(backgrounds[i]);
-		backgrounds[i].move(-moveConst, 0.0f);		
+		backgroundLayer.move(-1280.0f, 0.0f);
+	}
+	if (backgroundLayer.getPosition().x + 1280.0f < leftBound)
+	{
+		backgroundLayer.move(1280.0f, 0.0f);
 	}
 }

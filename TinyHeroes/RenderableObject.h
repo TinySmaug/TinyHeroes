@@ -8,5 +8,6 @@ public:
 	~RenderableObject();
 
 	virtual void render(sf::RenderWindow &window) = 0;
+	virtual void resize(sf::RenderWindow &window) = 0;
 };
 

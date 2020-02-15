@@ -9,6 +9,7 @@ public:
 	~Entity();
 
 	void render(sf::RenderWindow &window);
+	void resize(sf::RenderWindow &window);
 
 protected:
 	sf::Sprite sprite;

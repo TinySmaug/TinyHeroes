@@ -2,7 +2,7 @@
 
 #include "RenderableObject.h"
 
-class BackgroundElement : public RenderableObject
+class BackgroundElement 
 
 {
 public:
@@ -10,11 +10,14 @@ public:
 	~BackgroundElement();
 
 	void render(sf::RenderWindow &window);
-	void update(sf::Vector2f playerVelocity, float deltaTime, sf::RenderWindow & window, sf::View & view);
+	void resize(sf::RenderWindow & window);
+
+	void update(float velocity, float deltaTime, sf::RenderWindow & window, sf::View & view);
 	void checkBounds(float velocity, float deltaTime, sf::RenderWindow & window, sf::View & view);
+
 	
 private:
-	std::vector<sf::Texture*> bgTextureLayers;
-	std::vector<sf::Sprite> backgrounds;
+	sf::Texture layerTexture;
+	sf::Sprite backgroundLayer;
 };
 

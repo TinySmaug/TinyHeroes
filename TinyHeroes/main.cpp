@@ -4,13 +4,14 @@
 #include "BackgroundElement.h"
 #include "PlayerCharacter.h"
 #include "Renderer.h"
+#include "Background.h"
 
 
 int main()
 {
 	Renderer* renderer = Renderer::getInstance();
 	
-	BackgroundElement background("Backgrounds/Mountain", renderer->getWindow());
+	Background background("Backgrounds/Forest", 7, renderer->getWindow());
 	renderer->renderableObjects.push_back(&background);
 
 	PlayerCharacter player("Heroes/PinkMonster/Pink_Monster.png");
@@ -34,7 +35,7 @@ int main()
 				renderer->getWindow().close();
 				break;
 			case sf::Event::Resized:
-				renderer->resizeView();
+				renderer->resize();
 				break;
 			/*
 			case sf::Event::TextEntered:
@@ -51,8 +52,6 @@ int main()
 		renderer->getWindow().setView(renderer->getView());
 
 		background.update(player.getVelocity(), deltaTime, renderer->getWindow(), renderer->getView());
-		//Iskomentarisi ovo iznad i zovi ovo ispod da vidis onu crnu liniju bez pomeranja layera
-		//background.checkBounds(player.getVelocity().x, deltaTime, renderer->getWindow(), renderer->getView());
 	
 		renderer->renderObjects();
 		renderer->getWindow().display();

@@ -42,8 +42,14 @@ void Renderer::renderObjects()
 	}	
 }
 
-void Renderer::resizeView()
+void Renderer::resize()
 {
 	float aspectRatio = static_cast<float>(window->getSize().x) / static_cast<float>(window->getSize().y);
+	
 	view->setSize(VIEW_WIDTH * aspectRatio, VIEW_HEIGHT);
+
+	for (auto object : renderableObjects)
+	{
+		object->resize(*window);
+	}
 }

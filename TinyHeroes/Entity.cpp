@@ -18,3 +18,8 @@ void Entity::render(sf::RenderWindow & window)
 	window.draw(sprite);
 }
 
+void Entity::resize(sf::RenderWindow & window)
+{
+	
+}
+

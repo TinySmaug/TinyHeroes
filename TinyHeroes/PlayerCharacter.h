@@ -23,11 +23,9 @@ private:
 	float acceleration;
 	float maxSpeed;
 
+	bool jumping;
+	bool running;
 	bool canJump;
 	float jumpHeight;
-
-	bool faceRight;
-	unsigned int animationIndex;
-	unsigned int imageCount;
 };
 

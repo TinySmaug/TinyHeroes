@@ -132,6 +132,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="Background.cpp" />
     <ClCompile Include="BackgroundElement.cpp" />
     <ClCompile Include="CollisionObject.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -142,6 +143,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="Background.h" />
     <ClInclude Include="BackgroundElement.h" />
     <ClInclude Include="CollisionObject.h" />
     <ClInclude Include="Entity.h" />
