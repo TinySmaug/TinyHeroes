@@ -30,10 +30,6 @@ void BackgroundElement::render(sf::RenderWindow & window)
 	backgroundLayer.move(-1280.0f, 0.0f);
 }
 
-void BackgroundElement::resize(sf::RenderWindow & window)
-{
-}
-
 void BackgroundElement::update(float velocity, float deltaTime, sf::RenderWindow & window, sf::View & view)
 {
 	backgroundLayer.move(velocity * deltaTime, 0.0f);

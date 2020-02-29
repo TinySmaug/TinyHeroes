@@ -10,7 +10,6 @@ public:
 	~BackgroundElement();
 
 	void render(sf::RenderWindow &window);
-	void resize(sf::RenderWindow & window);
 
 	void update(float velocity, float deltaTime, sf::RenderWindow & window, sf::View & view);
 	void checkBounds(float velocity, float deltaTime, sf::RenderWindow & window, sf::View & view);

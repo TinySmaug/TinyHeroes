@@ -1,6 +1,5 @@
 #include "Renderer.h"
-
-Renderer* Renderer::instance = nullptr;
+#include <algorithm>
 
 Renderer::Renderer() 
 {
@@ -8,12 +7,15 @@ Renderer::Renderer()
 	view = new sf::View(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(VIEW_WIDTH, VIEW_HEIGHT));
 }
 
-Renderer * Renderer::getInstance()
+Renderer::~Renderer()
 {
-	if (!instance)
-	{
-		instance = new Renderer();
-	}
+	delete window;
+	delete view;
+}
+
+Renderer& Renderer::getInstance()
+{
+	static Renderer instance;
 	return instance;
 }
 
@@ -36,20 +38,11 @@ void Renderer::renderObjects()
 	float bottomViewBound = view->getCenter().y + window->getSize().y / 2.0f;
 	*/
 
+	std::stable_sort(renderableObjects.begin(), renderableObjects.end(),
+		[](auto objA, auto objB) { return objA->getDepth() < objB->getDepth(); });
+
 	for (auto object : renderableObjects)
 	{
 		object->render(*window);
 	}	
-}
-
-void Renderer::resize()
-{
-	float aspectRatio = static_cast<float>(window->getSize().x) / static_cast<float>(window->getSize().y);
-	
-	view->setSize(VIEW_WIDTH * aspectRatio, VIEW_HEIGHT);
-
-	for (auto object : renderableObjects)
-	{
-		object->resize(*window);
-	}
 }

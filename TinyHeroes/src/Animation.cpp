@@ -3,7 +3,7 @@
 Animation::Animation()
 {
 	totalTime = 0.0f;
-	currentImage = 0;
+	info.currentImage = 0;
 }
 
 Animation::~Animation()
@@ -12,23 +12,23 @@ Animation::~Animation()
 
 void Animation::update(float deltaTime)
 {
+	if (info.currentImage >= info.imageCount)
+	{
+		info.currentImage = 0;
+	}
+
 	uvRect.width = animationTextures[info.animationIndex].getSize().x / static_cast<float>(info.imageCount);
 	uvRect.height = animationTextures[info.animationIndex].getSize().y;
 	totalTime += deltaTime;
 
-	if (currentImage >= info.imageCount)
-	{
-		currentImage = 0;
-	}
-
 	if (totalTime >= info.switchTime)
 	{
 		totalTime -= info.switchTime;
-		currentImage++;
+		info.currentImage++;
 
-		if (currentImage >= info.imageCount)
+		if (info.currentImage >= info.imageCount)
 		{
-			currentImage = 0;
+			info.currentImage = 0;
 		}
 	}
 
@@ -36,12 +36,12 @@ void Animation::update(float deltaTime)
 
 	if (info.faceRight)
 	{
-		uvRect.left = currentImage * uvRect.width;
+		uvRect.left = info.currentImage * uvRect.width;
 		uvRect.width = abs(uvRect.width);
 	}
 	else
 	{
-		uvRect.left = (currentImage + 1) * abs(uvRect.width);
+		uvRect.left = (info.currentImage + 1) * abs(uvRect.width);
 		uvRect.width = -abs(uvRect.width);
 	}
 }

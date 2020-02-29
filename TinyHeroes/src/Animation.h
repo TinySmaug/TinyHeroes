@@ -17,11 +17,11 @@ public:
 		unsigned int imageCount;
 		bool faceRight;
 		float switchTime;
+		unsigned int currentImage;
 	} animationInfo;
 	animationInfo info;
 
 private:
-	unsigned int currentImage;
 	float totalTime;
 };
 

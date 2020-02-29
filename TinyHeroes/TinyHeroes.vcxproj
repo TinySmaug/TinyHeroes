@@ -69,7 +69,22 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)bin\$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)bin\intermediates\$(Platform)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)bin\$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)bin\intermediates\$(Platform)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)bin\$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)bin\intermediates\$(Platform)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)bin\$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)bin\intermediates\$(Platform)\</IntDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -131,25 +146,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Animation.cpp" />
-    <ClCompile Include="Background.cpp" />
-    <ClCompile Include="BackgroundElement.cpp" />
-    <ClCompile Include="CollisionObject.cpp" />
-    <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="src\Projectile.cpp" />
+    <ClCompile Include="src\Animation.cpp" />
+    <ClCompile Include="src\Background.cpp" />
+    <ClCompile Include="src\BackgroundElement.cpp" />
+    <ClCompile Include="src\CollisionObject.cpp" />
+    <ClCompile Include="src\Entity.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="PlayerCharacter.cpp" />
-    <ClCompile Include="RenderableObject.cpp" />
-    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="src\PlayerCharacter.cpp" />
+    <ClCompile Include="src\RenderableObject.cpp" />
+    <ClCompile Include="src\Renderer.cpp" />
+    <ClCompile Include="src\WorldElement.cpp" />
+    <ClCompile Include="src\WorldInstance.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Animation.h" />
-    <ClInclude Include="Background.h" />
-    <ClInclude Include="BackgroundElement.h" />
-    <ClInclude Include="CollisionObject.h" />
-    <ClInclude Include="Entity.h" />
-    <ClInclude Include="PlayerCharacter.h" />
-    <ClInclude Include="RenderableObject.h" />
-    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="src\Projectile.h" />
+    <ClInclude Include="src\Animation.h" />
+    <ClInclude Include="src\Background.h" />
+    <ClInclude Include="src\BackgroundElement.h" />
+    <ClInclude Include="src\CollisionObject.h" />
+    <ClInclude Include="src\Entity.h" />
+    <ClInclude Include="src\PlayerCharacter.h" />
+    <ClInclude Include="src\RenderableObject.h" />
+    <ClInclude Include="src\Renderer.h" />
+    <ClInclude Include="src\WorldElement.h" />
+    <ClInclude Include="src\WorldInstance.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

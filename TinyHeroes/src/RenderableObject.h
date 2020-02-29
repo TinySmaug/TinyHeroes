@@ -5,9 +5,13 @@ class RenderableObject
 {
 public:
 	RenderableObject();
-	~RenderableObject();
+	virtual ~RenderableObject();
 
 	virtual void render(sf::RenderWindow &window) = 0;
-	virtual void resize(sf::RenderWindow &window) = 0;
+
+	int getDepth() { return depth; };
+
+protected:
+	int depth;
 };
 
