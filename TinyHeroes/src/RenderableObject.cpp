@@ -1,6 +1,7 @@
 #include "RenderableObject.h"
 
-RenderableObject::RenderableObject()
+RenderableObject::RenderableObject(int renderDepth)
+	: renderDepth(renderDepth)
 {
 }
 

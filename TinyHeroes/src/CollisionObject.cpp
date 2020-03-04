@@ -9,37 +9,22 @@ CollisionObject::~CollisionObject()
 {
 }
 
-bool CollisionObject::checkCollision(CollisionObject & other, sf::Vector2f& direction, sf::FloatRect& intersectionRect) const
+bool CollisionObject::checkCollision(CollisionObject & other)
 {
-	
-	if(body.intersects(other.body, intersectionRect))
+	if (body.intersects(other.body, intersectionRect))
 	{
-		if (intersectionRect.width < intersectionRect.height)
-		{
-			if (other.body.left - body.left > 0.0f)
-			{
-				direction.x = 1.0f;
-				direction.y = 0.0f;
-			}
-			else
-			{
-				direction.x = -1.0f;
-				direction.y = 0.0f;
-			}
-		}
-		else
-		{
-			if (other.body.top - body.top > 0.0f)
-			{
-				direction.x = 0.0f;
-				direction.y = 1.0f;
-			}
-			else
-			{
-				direction.x = 0.0f;
-				direction.y = -1.0f;
-			}
-		}
+		bool collisionOnYAxis = intersectionRect.width < intersectionRect.height;
+		bool collisionOnLeft = other.body.left - body.left < 0.0f;
+		bool collisionOnTop = other.body.top - body.top < 0.0f;
+
+		float widthMultiplier = collisionOnYAxis ? collisionOnLeft ? 1.0f : -1.0f : 0.0f;
+		float heightMultiplier = collisionOnYAxis ? 0 : collisionOnTop ? 1.0f : -1.0f;
+
+		intersectionRect.width *= widthMultiplier;
+		intersectionRect.height *= heightMultiplier;
+
+		other.intersectionRect.width = intersectionRect.width * -1.0f;
+		other.intersectionRect.height = intersectionRect.height * -1.0f;
 		return true;
 	}
 	return false;

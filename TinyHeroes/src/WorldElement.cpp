@@ -1,21 +1,21 @@
 #include "WorldElement.h"
+#include "Renderer.h"
 
-WorldElement::WorldElement(std::string texturePath, Renderer &renderer, WorldInstance& world, int depth)
-	: Entity(texturePath, renderer, world)
+WorldElement::WorldElement(std::string texturePath, int depth)
+	: Entity(texturePath, depth)
 {
-	this->depth = depth;
 }
 
 WorldElement::~WorldElement()
 {
 }
 
-void WorldElement::render(sf::RenderWindow & window)
+void WorldElement::render()
 {
-	window.draw(sprite);
+	Renderer::getInstance().getWindow().draw(sprite);
 }
 
-void WorldElement::onCollision(CollisionObject & other, sf::Vector2f& direction, sf::FloatRect& intersectionRect)
+void WorldElement::onCollision(CollisionObject & other)
 {
 }
 

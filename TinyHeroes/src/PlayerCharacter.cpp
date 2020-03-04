@@ -1,16 +1,16 @@
 #include "PlayerCharacter.h"
+#include "Renderer.h"
+#include "WorldInstance.h"
 
-//#include <iostream>
-
-PlayerCharacter::PlayerCharacter(std::string texturePath, Renderer &renderer, WorldInstance& world, int depth)
-	: Entity(texturePath, renderer, world)
+PlayerCharacter::PlayerCharacter(std::string texturePath, int depth)
+	: Entity(texturePath, depth)
 {
-	this->depth = depth;
-	animation.info.faceRight = true;
+	animation.currentAnimationInfo.faceRight = true;
 	canJump = true;
 	jumping = false;
 	running = false;
 	attacking = false;
+	canAttack = true;
 	acceleration = 20.0f;
 	maxSpeed = 200.0f;
 	jumpHeight = 100.0f;
@@ -30,9 +30,7 @@ PlayerCharacter::PlayerCharacter(std::string texturePath, Renderer &renderer, Wo
 	sprite.setPosition(0.0f, 400.0f);
 	body.left = sprite.getPosition().x;
 	body.top = sprite.getPosition().y;
-	sprite.setScale(sf::Vector2f(3.0f, 3.0f));
-	body.height *= 3.0f;
-	body.width *= 3.0f;
+	setScale(sf::Vector2f(3.0f, 3.0f));
 }
 
 
@@ -49,6 +47,10 @@ void PlayerCharacter::update(float deltaTime)
 	float idleSwitchTime = 0.3f;
 	float attackSwitchTime = 0.08f;
 
+	attacking = false;
+	if (!canAttack)
+		attacking = true;
+
 	jumping = false;
 	if (!canJump)
 		jumping = true;
@@ -62,114 +64,121 @@ void PlayerCharacter::update(float deltaTime)
 			canJump = false;
 			//square root( 2.0f * gravity * jumpHeight)
 			velocity.y = -sqrtf(2.0f * 981.0f * jumpHeight);
+			animation.currentAnimationInfo.currentImage = 0;
 		}
-		animation.info.currentImage = 0;
 	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
 	{
 		attacking = true;
-		animation.info.currentImage = 0;
+		if (canAttack)
+		{
+			canAttack = false;
+			animation.currentAnimationInfo.currentImage = 0;
+		}
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
 		velocity.x -= acceleration;
-		animation.info.animationIndex = 1;
-		animation.info.imageCount = 6;
-		animation.info.switchTime = walkingSwitchTime;
-		animation.info.faceRight = false;
+		animation.currentAnimationInfo.animationIndex = 1;
+		animation.currentAnimationInfo.imageCount = 6;
+		animation.currentAnimationInfo.switchTime = walkingSwitchTime;
+		animation.currentAnimationInfo.faceRight = false;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
 		{
 			running = true;
 			velocity.x -= acceleration;
-			animation.info.animationIndex = 2;
-			animation.info.imageCount = 6;
-			animation.info.switchTime = runningSwitchTime;
+			animation.currentAnimationInfo.animationIndex = 2;
+			animation.currentAnimationInfo.imageCount = 6;
+			animation.currentAnimationInfo.switchTime = runningSwitchTime;
 		}
 		if (jumping)
 		{
-			animation.info.animationIndex = 3;
-			animation.info.imageCount = 8;
-			animation.info.switchTime = jumpingSwitchTime;
+			animation.currentAnimationInfo.animationIndex = 3;
+			animation.currentAnimationInfo.imageCount = 8;
+			animation.currentAnimationInfo.switchTime = jumpingSwitchTime;
 		}
 		if (attacking)
 		{
-			if (animation.info.currentImage >= 3)
+			if (animation.currentAnimationInfo.currentImage >= 3)
 			{
 				attacking = false;
+				canAttack = true;
 			}
 			else
 			{
-				animation.info.animationIndex = 4;
-				animation.info.imageCount = 4;
-				animation.info.switchTime = attackSwitchTime;
+				animation.currentAnimationInfo.animationIndex = 4;
+				animation.currentAnimationInfo.imageCount = 4;
+				animation.currentAnimationInfo.switchTime = attackSwitchTime;
 			}
 		}
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
 		velocity.x += acceleration;
-		animation.info.animationIndex = 1;
-		animation.info.imageCount = 6;
-		animation.info.switchTime = walkingSwitchTime;
-		animation.info.faceRight = true;
+		animation.currentAnimationInfo.animationIndex = 1;
+		animation.currentAnimationInfo.imageCount = 6;
+		animation.currentAnimationInfo.switchTime = walkingSwitchTime;
+		animation.currentAnimationInfo.faceRight = true;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
 		{
 			running = true;
 			velocity.x += acceleration;
-			animation.info.animationIndex = 2;
-			animation.info.imageCount = 6;
-			animation.info.switchTime = runningSwitchTime;
+			animation.currentAnimationInfo.animationIndex = 2;
+			animation.currentAnimationInfo.imageCount = 6;
+			animation.currentAnimationInfo.switchTime = runningSwitchTime;
 		}
 		if (jumping)
 		{
-			animation.info.animationIndex = 3;
-			animation.info.imageCount = 8;
-			animation.info.switchTime = jumpingSwitchTime;
+			animation.currentAnimationInfo.animationIndex = 3;
+			animation.currentAnimationInfo.imageCount = 8;
+			animation.currentAnimationInfo.switchTime = jumpingSwitchTime;
 		}
 		if (attacking)
 		{
-			if (animation.info.currentImage >= 3)
+			if (animation.currentAnimationInfo.currentImage >= 3)
 			{
 				attacking = false;
+				canAttack = true;
 			}
 			else
 			{
-				animation.info.animationIndex = 4;
-				animation.info.imageCount = 4;
-				animation.info.switchTime = attackSwitchTime;
+				animation.currentAnimationInfo.animationIndex = 4;
+				animation.currentAnimationInfo.imageCount = 4;
+				animation.currentAnimationInfo.switchTime = attackSwitchTime;
 			}
 		}
 	}
 	else if (jumping)
 	{
-		animation.info.animationIndex = 3;
-		animation.info.imageCount = 8;
-		animation.info.switchTime = jumpingSwitchTime;
+		animation.currentAnimationInfo.animationIndex = 3;
+		animation.currentAnimationInfo.imageCount = 8;
+		animation.currentAnimationInfo.switchTime = jumpingSwitchTime;
 	}
 	else if (attacking)
 	{
-		if (animation.info.currentImage >= 3)
+		if (animation.currentAnimationInfo.currentImage >= 3)
 		{
 			attacking = false;
+			canAttack = true;
 		}
 		else
 		{
-			animation.info.animationIndex = 4;
-			animation.info.imageCount = 4;
-			animation.info.switchTime = attackSwitchTime;
+			animation.currentAnimationInfo.animationIndex = 4;
+			animation.currentAnimationInfo.imageCount = 4;
+			animation.currentAnimationInfo.switchTime = attackSwitchTime;
 		}
 	}
 	else
 	{
 		velocity.x = 0.0f; //insta stop moving when key isnt pressed
 		//velocity.x *= 0.0f; //slowly stop moving (higher number=slower stop time, lower number=faster stop time)
-		
-		animation.info.animationIndex = 0;
-		animation.info.imageCount = 4;
-		animation.info.switchTime = idleSwitchTime;
+
+		animation.currentAnimationInfo.animationIndex = 0;
+		animation.currentAnimationInfo.imageCount = 4;
+		animation.currentAnimationInfo.switchTime = idleSwitchTime;
 	}
-	
+
 	velocity.y += 981.0f * deltaTime; //adding gravity to go down
 
 	if (abs(velocity.x) > maxSpeed)
@@ -183,30 +192,38 @@ void PlayerCharacter::update(float deltaTime)
 			velocity.x = abs(velocity.x) > 2.0f * maxSpeed ? 2.0f * maxSpeed * (velocity.x / abs(velocity.x)) : velocity.x;
 		}
 	}
-	
+	if (sprite.getPosition().y >
+		(Renderer::getInstance().getView().getCenter().y + Renderer::getInstance().getView().getSize().y / 2.0f))
+	{
+		//stop moving when player falls through the ground
+		velocity.x = 0.0f;
+	}
+
 	animation.update(deltaTime);
 	sprite.setTextureRect(animation.uvRect);
-	sprite.setTexture(animation.animationTextures[animation.info.animationIndex]);
+	sprite.setTexture(animation.animationTextures[animation.currentAnimationInfo.animationIndex]);
 	sprite.move(velocity * deltaTime);
 	body.left = sprite.getPosition().x;
-	body.top = sprite.getPosition().y;	
+	body.top = sprite.getPosition().y;
+
+	WorldInstance::getInstance().setWorldSpeed(velocity.x);
 }
 
-void PlayerCharacter::render(sf::RenderWindow & window)
+void PlayerCharacter::render()
 {
-	window.draw(sprite);
+	Renderer::getInstance().getWindow().draw(sprite);
 }
 
-void PlayerCharacter::onCollision(CollisionObject & other, sf::Vector2f& direction, sf::FloatRect& intersectionRect)
+void PlayerCharacter::onCollision(CollisionObject & other)
 {
-	if (direction.x < 0.0f)
+	if (intersectionRect.width < 0.0f)
 	{
 		//collision on the left
-		sprite.move(-intersectionRect.width, 0.0f);
+		sprite.move(intersectionRect.width, 0.0f);
 		body.left = sprite.getPosition().x;
 		velocity.x = 0.0f;
 	}
-	else if (direction.x > 0.0f)
+	else if (intersectionRect.width > 0.0f)
 	{
 		//collision on the right
 		sprite.move(intersectionRect.width, 0.0f);
@@ -214,15 +231,15 @@ void PlayerCharacter::onCollision(CollisionObject & other, sf::Vector2f& directi
 		velocity.x = 0.0f;
 	}
 
-	if (direction.y < 0.0f)
+	if (intersectionRect.height < 0.0f)
 	{
 		//collision on the bottom
-		sprite.move(0.0f, -intersectionRect.height);
+		sprite.move(0.0f, intersectionRect.height);
 		body.top = sprite.getPosition().y;
 		velocity.y = 0.0f;
 		canJump = true;
 	}
-	else if (direction.y > 0.0f)
+	else if (intersectionRect.height > 0.0f)
 	{
 		//collision on the top
 		sprite.move(0.0f, intersectionRect.height);

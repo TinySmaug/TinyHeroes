@@ -1,18 +1,20 @@
 #pragma once
-#include "RenderableObject.h"
 #include <vector>
 #include "SFML/Graphics.hpp"
 
-static const float VIEW_HEIGHT = 600.0f;
-static const float VIEW_WIDTH = 1280.0f;
+class RenderableObject;
 
 class Renderer
 {
 public:
 	void renderObjects();
 	static Renderer& getInstance();
-	sf::RenderWindow& getWindow();
-	sf::View& getView();
+	sf::RenderWindow& getWindow() const;
+	sf::View& getView() const;
+
+	std::vector<RenderableObject*>& getRenderableObjects() { return renderableObjects; };
+	void addRenderableObject(RenderableObject* object);
+	std::vector<RenderableObject*>::iterator removeRenderableObject(std::vector<RenderableObject*>::iterator i);
 
 private:
 	Renderer();
@@ -20,10 +22,10 @@ private:
 	Renderer(Renderer const&) {};
 	Renderer& operator=(Renderer const&) {};
 
-public:
-	std::vector<RenderableObject*> renderableObjects;
+	bool outOfView(RenderableObject& object) const;
 
 private:
+	std::vector<RenderableObject*> renderableObjects;
 	sf::RenderWindow* window;
 	sf::View* view;
 };

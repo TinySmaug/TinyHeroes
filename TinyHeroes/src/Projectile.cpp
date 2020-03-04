@@ -1,10 +1,9 @@
 #include "Projectile.h"
+#include "Renderer.h"
 
-Projectile::Projectile(std::string texturePath, Renderer &renderer, WorldInstance& world,
-					   int depth, float speed, sf::Vector2f position, bool faceRight)
-	: Entity(texturePath, renderer, world),speed(speed), faceRight(faceRight)
+Projectile::Projectile(std::string texturePath, int depth, float speed, sf::Vector2f position, bool faceRight)
+	: Entity(texturePath, depth),speed(speed), faceRight(faceRight)
 {
-	this->depth = depth;
 	sprite.setPosition(position);
 	sprite.setScale(sf::Vector2f(3.0f, 3.0f));
 }
@@ -14,9 +13,9 @@ Projectile::~Projectile()
 {
 }
 
-void Projectile::render(sf::RenderWindow & window)
+void Projectile::render()
 {
-	window.draw(sprite);
+	Renderer::getInstance().getWindow().draw(sprite);
 }
 
 void Projectile::update(float deltaTime)
@@ -25,4 +24,8 @@ void Projectile::update(float deltaTime)
 		sprite.move(speed * deltaTime, 0.0f);
 	else
 		sprite.move(-speed * deltaTime, 0.0f);
+}
+
+void Projectile::onCollision(CollisionObject & other)
+{
 }

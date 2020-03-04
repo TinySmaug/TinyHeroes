@@ -3,7 +3,7 @@
 Animation::Animation()
 {
 	totalTime = 0.0f;
-	info.currentImage = 0;
+	currentAnimationInfo.currentImage = 0;
 }
 
 Animation::~Animation()
@@ -12,36 +12,36 @@ Animation::~Animation()
 
 void Animation::update(float deltaTime)
 {
-	if (info.currentImage >= info.imageCount)
+	if (currentAnimationInfo.currentImage >= currentAnimationInfo.imageCount)
 	{
-		info.currentImage = 0;
+		currentAnimationInfo.currentImage = 0;
 	}
 
-	uvRect.width = animationTextures[info.animationIndex].getSize().x / static_cast<float>(info.imageCount);
-	uvRect.height = animationTextures[info.animationIndex].getSize().y;
+	uvRect.width = animationTextures[currentAnimationInfo.animationIndex].getSize().x / static_cast<float>(currentAnimationInfo.imageCount);
+	uvRect.height = animationTextures[currentAnimationInfo.animationIndex].getSize().y;
 	totalTime += deltaTime;
 
-	if (totalTime >= info.switchTime)
+	if (totalTime >= currentAnimationInfo.switchTime)
 	{
-		totalTime -= info.switchTime;
-		info.currentImage++;
+		totalTime -= currentAnimationInfo.switchTime;
+		currentAnimationInfo.currentImage++;
 
-		if (info.currentImage >= info.imageCount)
+		if (currentAnimationInfo.currentImage >= currentAnimationInfo.imageCount)
 		{
-			info.currentImage = 0;
+			currentAnimationInfo.currentImage = 0;
 		}
 	}
 
 	uvRect.top = 0;
 
-	if (info.faceRight)
+	if (currentAnimationInfo.faceRight)
 	{
-		uvRect.left = info.currentImage * uvRect.width;
+		uvRect.left = currentAnimationInfo.currentImage * uvRect.width;
 		uvRect.width = abs(uvRect.width);
 	}
 	else
 	{
-		uvRect.left = (info.currentImage + 1) * abs(uvRect.width);
+		uvRect.left = (currentAnimationInfo.currentImage + 1) * abs(uvRect.width);
 		uvRect.width = -abs(uvRect.width);
 	}
 }

@@ -1,17 +1,20 @@
 #include "Background.h"
+#include "Renderer.h"
+#include "WorldInstance.h"
 
-
-Background::Background(std::string file, int layerNum, Renderer &renderer, int depth)
+Background::Background(std::string file, int layerNum, int renderDepth)
+	: RenderableObject(renderDepth)
 {
 	for (int i = 0; i < layerNum; i++)
 	{
 		std::string path = file;
 		path.append("/").append(std::to_string(i)).append(".png");
 
-		background.push_back(new BackgroundElement(path, renderer.getWindow()));
+		background.push_back(new BackgroundElement(path));
 	}
-	this->depth = depth;
-	renderer.renderableObjects.push_back(this);
+
+	Renderer::getInstance().addRenderableObject(this);
+	WorldInstance::getInstance().addAliveObject(this);
 }
 
 
@@ -21,22 +24,22 @@ Background::~Background()
 		delete i;
 }
 
-void Background::render(sf::RenderWindow & window)
+void Background::render()
 {
 	for (auto layer : background)
 	{
-		layer->render(window);
+		layer->render();
 	}
 }
 
-void Background::update(sf::Vector2f playerVelocity, float deltaTime, Renderer &renderer)
+void Background::update(float deltaTime)
 {
 	float layerMultiplier = 0.5f;
-	float velocity = playerVelocity.x / 2.5f;
+	float velocity = WorldInstance::getInstance().getWorldSpeed() / 2.5f;
 
 	for (int i = background.size() - 1; i >= 0; i--)
 	{
-		background[i]->update(velocity, deltaTime, renderer.getWindow(), renderer.getView());
+		background[i]->update(velocity, deltaTime);
 		velocity *= layerMultiplier;
 	}
 }

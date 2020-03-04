@@ -6,13 +6,13 @@ class BackgroundElement
 
 {
 public:
-	BackgroundElement(std::string file, sf::RenderWindow &window);
+	BackgroundElement(std::string file);
 	~BackgroundElement();
 
-	void render(sf::RenderWindow &window);
+	void render();
 
-	void update(float velocity, float deltaTime, sf::RenderWindow & window, sf::View & view);
-	void checkBounds(float velocity, float deltaTime, sf::RenderWindow & window, sf::View & view);
+	void update(float velocity, float deltaTime);
+	void checkBounds(float velocity, float deltaTime);
 
 	
 private:

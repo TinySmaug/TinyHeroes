@@ -7,9 +7,12 @@ public:
 	CollisionObject(sf::FloatRect& body);
 	virtual ~CollisionObject();
 
-	virtual void onCollision(CollisionObject & other, sf::Vector2f& direction, sf::FloatRect& intersectionRect) = 0;
+	virtual void onCollision(CollisionObject & other) = 0;
 
-	bool checkCollision(CollisionObject& other, sf::Vector2f& direction, sf::FloatRect& intersectionRect) const;
+	bool checkCollision(CollisionObject& other);
+
+protected:
+	sf::FloatRect intersectionRect;
 
 private:
 	sf::FloatRect& body;

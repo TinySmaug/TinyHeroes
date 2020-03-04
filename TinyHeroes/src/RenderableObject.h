@@ -4,14 +4,14 @@
 class RenderableObject
 {
 public:
-	RenderableObject();
+	RenderableObject(int renderDepth);
 	virtual ~RenderableObject();
 
-	virtual void render(sf::RenderWindow &window) = 0;
+	virtual void render() = 0;
 
-	int getDepth() { return depth; };
+	int getRenderDepth() const { return renderDepth; };
 
 protected:
-	int depth;
+	int renderDepth;
 };
 

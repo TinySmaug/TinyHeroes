@@ -19,7 +19,7 @@ public:
 		float switchTime;
 		unsigned int currentImage;
 	} animationInfo;
-	animationInfo info;
+	animationInfo currentAnimationInfo;
 
 private:
 	float totalTime;

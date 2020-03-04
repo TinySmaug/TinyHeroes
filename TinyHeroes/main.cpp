@@ -1,25 +1,25 @@
 #include <SFML\Graphics.hpp>
-#include <iostream>
-#include <vector>
-#include "src\BackgroundElement.h"
+//#include <iostream>
+//#include <vector>
 #include "src\PlayerCharacter.h"
 #include "src\Renderer.h"
 #include "src\Background.h"
 #include "src\WorldElement.h"
 #include "src\WorldInstance.h"
+#include "src\CollisionEngine.h"
 
 int main()
 {
 	Renderer& renderer = Renderer::getInstance();
-	WorldInstance world;
+	WorldInstance& world = WorldInstance::getInstance();
+	CollisionEngine& collisionEngine = CollisionEngine::getInstance();
 	
-	Background background("Backgrounds/Forest", 7, renderer, -1);
+	Background background("Backgrounds/Forest", 7, -1);
+	PlayerCharacter player("Heroes/PinkMonster/Pink_Monster.png", 0);
 
-	PlayerCharacter player("Heroes/PinkMonster/Pink_Monster.png", renderer, world, 0);
-
-	WorldElement platform1 = WorldElement("World/Platform.png", renderer, world, 2);
+	WorldElement platform1 = WorldElement("World/Platform.png", 2);
 	platform1.setPosition(sf::Vector2f(-300.0f, 560.0f));
-	WorldElement platform2("World/Platform.png", renderer, world, 2);
+	WorldElement platform2 = WorldElement("World/Platform.png", 2);
 	platform2.setPosition(sf::Vector2f(-300.0f + 1280.0f + 150.0f, 560.0f));
 
 	float deltaTime = 0.0f;
@@ -41,7 +41,6 @@ int main()
 				break;
 			/*
 			case sf::Event::Resized:
-				renderer->resize();
 				break;
 			*/
 			/*
@@ -55,17 +54,14 @@ int main()
 		
 		world.updateObjects(deltaTime);
 
-		sf::Vector2f direction;
-		sf::FloatRect intersectionRect;
-		if (platform1.checkCollision(player, direction, intersectionRect))
-			player.onCollision(platform1, direction, intersectionRect);
-		if (platform2.checkCollision(player, direction, intersectionRect))
-			player.onCollision(platform2, direction, intersectionRect);
+		collisionEngine.checkCollisions();
+
+		//if (player.getPosition().x > 900.0f)
+			//platform1.destroy();
 
 		renderer.getView().setCenter(player.getPosition().x + 340.0f, 300.0f);
 		renderer.getWindow().setView(renderer.getView());
 
-		background.update(player.getVelocity(), deltaTime, renderer);
 	
 		renderer.renderObjects();
 		renderer.getWindow().display();

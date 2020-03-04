@@ -146,6 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\CollisionEngine.cpp" />
     <ClCompile Include="src\Projectile.cpp" />
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\Background.cpp" />
@@ -160,6 +161,7 @@
     <ClCompile Include="src\WorldInstance.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\CollisionEngine.h" />
     <ClInclude Include="src\Projectile.h" />
     <ClInclude Include="src\Animation.h" />
     <ClInclude Include="src\Background.h" />

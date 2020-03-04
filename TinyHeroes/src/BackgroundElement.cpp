@@ -1,15 +1,16 @@
 #include "BackgroundElement.h"
+#include "Renderer.h"
 #include <vector>
 #include <string>
 
 
-BackgroundElement::BackgroundElement(std::string file, sf::RenderWindow &window)
+BackgroundElement::BackgroundElement(std::string file)
 {
 	layerTexture.loadFromFile(file);
 
 	sf::Vector2u bgTextureSize = layerTexture.getSize();
-	sf::Vector2f bgTextureScale(static_cast<float>(window.getSize().x) / bgTextureSize.x,
-								static_cast<float>(window.getSize().y) / bgTextureSize.y);
+	sf::Vector2f bgTextureScale(static_cast<float>(Renderer::getInstance().getWindow().getSize().x) / bgTextureSize.x,
+								static_cast<float>(Renderer::getInstance().getWindow().getSize().y) / bgTextureSize.y);
 
 	backgroundLayer.setTexture(layerTexture);
 	backgroundLayer.scale(bgTextureScale);
@@ -20,27 +21,27 @@ BackgroundElement::~BackgroundElement()
 }
 
 
-void BackgroundElement::render(sf::RenderWindow & window)
+void BackgroundElement::render()
 {
-	window.draw(backgroundLayer);
+	Renderer::getInstance().getWindow().draw(backgroundLayer);
 	backgroundLayer.move(-1280.0f, 0.0f);
-	window.draw(backgroundLayer);
+	Renderer::getInstance().getWindow().draw(backgroundLayer);
 	backgroundLayer.move(2.0f*1280.0f, 0.0f);
-	window.draw(backgroundLayer);
+	Renderer::getInstance().getWindow().draw(backgroundLayer);
 	backgroundLayer.move(-1280.0f, 0.0f);
 }
 
-void BackgroundElement::update(float velocity, float deltaTime, sf::RenderWindow & window, sf::View & view)
+void BackgroundElement::update(float velocity, float deltaTime)
 {
 	backgroundLayer.move(velocity * deltaTime, 0.0f);
-	checkBounds(velocity, deltaTime, window, view);
+	checkBounds(velocity, deltaTime);
 }
 
-void BackgroundElement::checkBounds(float velocity, float deltaTime, sf::RenderWindow & window, sf::View & view)
+void BackgroundElement::checkBounds(float velocity, float deltaTime)
 {
 	float moveConst = 1280.0f - velocity*deltaTime;
 
-	float viewCenterX = view.getCenter().x;
+	float viewCenterX = Renderer::getInstance().getView().getCenter().x;
 	float leftBound = viewCenterX - 640.0f;
 	float rightBound = viewCenterX + 640.0f;
 
