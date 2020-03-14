@@ -8,10 +8,14 @@ public:
 	virtual ~RenderableObject();
 
 	virtual void render() = 0;
+	virtual sf::FloatRect getRenderableArea() = 0;
 
 	int getRenderDepth() const { return renderDepth; };
+	void setHidden(bool hidden) { this->hidden = hidden; };
+	bool isHidden() { return hidden; };
 
 protected:
 	int renderDepth;
+	bool hidden = false;
 };
 

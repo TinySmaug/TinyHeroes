@@ -1,5 +1,6 @@
 #include "CollisionObject.h"
 
+
 CollisionObject::CollisionObject(sf::FloatRect& body)
 	: body(body)
 {

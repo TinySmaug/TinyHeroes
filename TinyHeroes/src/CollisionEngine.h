@@ -11,7 +11,7 @@ public:
 
 	std::vector<CollisionObject*>& getCollisionObjects() { return collisionObjects; };
 	void addCollisionObject(CollisionObject* object);
-	std::vector<CollisionObject*>::iterator removeCollisionObject(std::vector<CollisionObject*>::iterator i);
+	void removeCollisionObject(unsigned objectID);
 
 private:
 	CollisionEngine();
@@ -19,7 +19,11 @@ private:
 	CollisionEngine(CollisionEngine const&) {};
 	CollisionEngine& operator=(CollisionEngine const&) {};
 
+	void updateCollisionObjectsVector();
+
 private:
 	std::vector<CollisionObject*> collisionObjects;
+	std::vector<CollisionObject*> objectsToCollide;
+	std::vector<unsigned> objectsToRemove;
 };
 

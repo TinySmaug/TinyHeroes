@@ -146,6 +146,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\InputManager.cpp" />
+    <ClCompile Include="src\SelectIcon.cpp" />
+    <ClCompile Include="src\Platform.cpp" />
     <ClCompile Include="src\CollisionEngine.cpp" />
     <ClCompile Include="src\Projectile.cpp" />
     <ClCompile Include="src\Animation.cpp" />
@@ -159,8 +162,12 @@
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\WorldElement.cpp" />
     <ClCompile Include="src\WorldInstance.cpp" />
+    <ClCompile Include="src\SelectionScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\InputManager.h" />
+    <ClInclude Include="src\SelectIcon.h" />
+    <ClInclude Include="src\Platform.h" />
     <ClInclude Include="src\CollisionEngine.h" />
     <ClInclude Include="src\Projectile.h" />
     <ClInclude Include="src\Animation.h" />
@@ -173,6 +180,7 @@
     <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\WorldElement.h" />
     <ClInclude Include="src\WorldInstance.h" />
+    <ClInclude Include="src\SelectionScreen.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

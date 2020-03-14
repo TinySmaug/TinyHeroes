@@ -7,24 +7,54 @@ class PlayerCharacter : public Entity
 public:
 	PlayerCharacter(std::string texturePath, int depth);
 	~PlayerCharacter();
+	PlayerCharacter& operator= (PlayerCharacter& other);
 
 	void update(float deltaTime);
 	void render() override;
 	void onCollision(CollisionObject & other);
 
+	void addInputHandlerFunctions();
+	void removeInputHandlerFunctions();
+
 	sf::Vector2f getVelocity() const { return velocity; };
-	sf::Vector2f getPosition() const { return sprite.getPosition(); }
 
 private:
+	void setCurrentAnimationInfo();
+	void throwRock();
+
+	void handleLeftMouseButtonClick(float deltaTime);
+	void handleRightMouseButtonClick(float deltaTime);
+	void handleAKeyboardButtonPressed(float deltaTime);
+	void handleDKeyboardButtonPressed(float deltaTime);
+	void handleSpaceKeyboardButtonPressed(float deltaTime);
+	void handleLShiftKeyboardButtonPressed(float deltaTime);
+
+	void handleLeftMouseButtonReleased(float deltaTime);
+	void handleRightMouseButtonReleased(float deltaTime);
+	void handleAKeyboardButtonReleased(float deltaTime);
+	void handleDKeyboardButtonReleased(float deltaTime);
+	void handleSpaceKeyboardButtonReleased(float deltaTime);
+	void handleLShiftKeyboardButtonReleased(float deltaTime);
+
+private:
+	typedef struct state {
+		bool walkAttack;
+		bool attacking;
+		bool throwing;
+		bool jumping;
+		bool running;
+		bool pushing;
+		bool walking;
+	} state;
+	state playerState;
 	sf::Vector2f velocity;
+	float speedMultiplier;
 	float acceleration;
 	float maxSpeed;
-
-	bool attacking;
-	bool canAttack;
-	bool jumping;
-	bool running;
+	bool canThrow;
 	bool canJump;
+	bool canAttack;
+	bool canWalkAttack;
 	float jumpHeight;
 };
 

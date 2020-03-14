@@ -1,9 +1,12 @@
 #include "WorldInstance.h"
 #include "Entity.h"
 #include "Background.h"
+#include "PlayerCharacter.h"
 
 WorldInstance::WorldInstance()
 {
+	worldSpeed = 0.0f;
+	gravity = 981.0f;
 }
 
 WorldInstance::~WorldInstance()
@@ -19,25 +22,44 @@ WorldInstance& WorldInstance::getInstance()
 
 void WorldInstance::updateObjects(float deltaTime)
 {
-	for (auto i = aliveObjects.begin(); i!=aliveObjects.end();)
+	updateAliveObjectsVector();
+
+	for (auto i = aliveObjects.begin(); i != aliveObjects.end(); i++)
 	{
-		if ((*i) == nullptr)
+		(*i)->update(deltaTime);
+		if (dynamic_cast<PlayerCharacter*>(*i))
 		{
-			i = removeAliveObject(i);
-		}
-		else
-		{
-			(*i)->update(deltaTime);
-			++i;
+			auto player = dynamic_cast<PlayerCharacter*>(*i);
+			playerPosition = player->getPosition();
 		}
 	}
 	if(background != nullptr)
 		background->update(deltaTime);
+
+}
+
+void WorldInstance::updateAliveObjectsVector()
+{
+	for (auto i : objectsToSpawn)
+	{
+		aliveObjects.emplace_back(i);
+	}
+	for (auto i : objectsToRemove)
+	{
+		auto findResult = std::find_if(aliveObjects.begin(), aliveObjects.end(), [i](Entity* entity) { return entity->getID() == i; });
+
+		if (findResult != aliveObjects.end())
+		{
+			aliveObjects.erase(findResult);
+		}
+	}
+	objectsToSpawn.clear();
+	objectsToRemove.clear();
 }
 
 void WorldInstance::addAliveObject(Entity * object)
 {
-	aliveObjects.emplace_back(object);
+	objectsToSpawn.emplace_back(object);
 }
 
 void WorldInstance::addAliveObject(Background * object)
@@ -45,7 +67,7 @@ void WorldInstance::addAliveObject(Background * object)
 	background = object;
 }
 
-std::vector<Entity*>::iterator WorldInstance::removeAliveObject(std::vector<Entity*>::iterator i)
+void WorldInstance::removeAliveObject(unsigned entityID)
 {
-	return aliveObjects.erase(i);
+	return objectsToRemove.emplace_back(entityID);
 }

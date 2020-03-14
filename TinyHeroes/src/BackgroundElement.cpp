@@ -23,12 +23,28 @@ BackgroundElement::~BackgroundElement()
 
 void BackgroundElement::render()
 {
+	float leftViewBound = Renderer::getInstance().getView().getCenter().x - Renderer::getInstance().getView().getSize().x / 2.0f;
+	float rightViewBound = Renderer::getInstance().getView().getCenter().x + Renderer::getInstance().getView().getSize().x / 2.0f;
+	
+	sf::FloatRect body;
+	float viewSizeX = Renderer::getInstance().getView().getSize().x;
+	//center layer
 	Renderer::getInstance().getWindow().draw(backgroundLayer);
-	backgroundLayer.move(-1280.0f, 0.0f);
-	Renderer::getInstance().getWindow().draw(backgroundLayer);
-	backgroundLayer.move(2.0f*1280.0f, 0.0f);
-	Renderer::getInstance().getWindow().draw(backgroundLayer);
-	backgroundLayer.move(-1280.0f, 0.0f);
+	//left layer
+	backgroundLayer.move(-viewSizeX, 0.0f);
+	body.left = backgroundLayer.getPosition().x;
+	if (!(body.left + viewSizeX < leftViewBound))
+	{
+		Renderer::getInstance().getWindow().draw(backgroundLayer);
+	}
+	//right layer
+	backgroundLayer.move(2.0f*viewSizeX, 0.0f);
+	body.left = backgroundLayer.getPosition().x;
+	if (!(body.left > rightViewBound))
+	{
+		Renderer::getInstance().getWindow().draw(backgroundLayer);
+	}
+	backgroundLayer.move(-viewSizeX, 0.0f);
 }
 
 void BackgroundElement::update(float velocity, float deltaTime)
@@ -39,18 +55,19 @@ void BackgroundElement::update(float velocity, float deltaTime)
 
 void BackgroundElement::checkBounds(float velocity, float deltaTime)
 {
-	float moveConst = 1280.0f - velocity*deltaTime;
+	float moveConst = Renderer::getInstance().getView().getSize().x - velocity*deltaTime;
 
 	float viewCenterX = Renderer::getInstance().getView().getCenter().x;
-	float leftBound = viewCenterX - 640.0f;
-	float rightBound = viewCenterX + 640.0f;
+	float viewSizeX = Renderer::getInstance().getView().getSize().x;
+	float leftBound = viewCenterX - Renderer::getInstance().getView().getSize().x / 2.0f;
+	float rightBound = viewCenterX + Renderer::getInstance().getView().getSize().x / 2.0f;
 
 	if (backgroundLayer.getPosition().x > rightBound)
 	{
-		backgroundLayer.move(-1280.0f, 0.0f);
+		backgroundLayer.move(-viewSizeX, 0.0f);
 	}
-	if (backgroundLayer.getPosition().x + 1280.0f < leftBound)
+	if (backgroundLayer.getPosition().x + viewSizeX < leftBound)
 	{
-		backgroundLayer.move(1280.0f, 0.0f);
+		backgroundLayer.move(viewSizeX, 0.0f);
 	}
 }

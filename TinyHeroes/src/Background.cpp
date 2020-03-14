@@ -32,6 +32,30 @@ void Background::render()
 	}
 }
 
+sf::FloatRect Background::getRenderableArea()
+{
+	sf::FloatRect body; 
+	body.width = Renderer::getInstance().getView().getSize().x * 3.0f;
+	body.height = Renderer::getInstance().getView().getSize().y;
+	body.left = Renderer::getInstance().getView().getCenter().x - Renderer::getInstance().getView().getSize().x / 2.0f;
+	body.top = Renderer::getInstance().getView().getCenter().y - Renderer::getInstance().getView().getSize().y / 2.0f;
+
+	return body;
+}
+
+/*
+void Background::setTexture(std::string file, int layerNum)
+{
+	for (int i = 0; i < layerNum; i++)
+	{
+		std::string path = file;
+		path.append("/").append(std::to_string(i)).append(".png");
+
+		background.push_back(new BackgroundElement(path));
+	}
+}
+*/
+
 void Background::update(float deltaTime)
 {
 	float layerMultiplier = 0.5f;

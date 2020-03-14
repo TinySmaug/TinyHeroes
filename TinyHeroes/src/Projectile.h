@@ -12,7 +12,10 @@ public:
 	void onCollision(CollisionObject & other);
 
 private:
+	sf::Vector2f velocity;
+	sf::Vector2f startingPosition;
 	float speed;
+	bool flyUpwards;
 	bool faceRight;
 };
 

@@ -1,16 +1,15 @@
 #pragma once
 #include "Entity.h"
 
-class WorldElement : public Entity
+class Platform : public Entity
 {
 public:
-	WorldElement(std::string texturePath, int depth);
-	~WorldElement();
+	Platform(std::string texturePath, int depth);
+	~Platform();
 
 	void render() override;
 	void onCollision(CollisionObject & other);
 	void update(float deltaTime);
-
-private:
-	sf::Vector2f velocity;
+	void setSize(int width, int height);
 };
+

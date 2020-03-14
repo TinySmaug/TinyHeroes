@@ -6,13 +6,16 @@
 Entity::Entity(std::string texturePath, int depth)
 	: CollisionObject(body), RenderableObject(depth)
 {
-	texture.loadFromFile(texturePath);
-	sprite.setTexture(texture);
+	if (texturePath.length() != 0)
+	{
+		texture.loadFromFile(texturePath);
+		texture.setRepeated(true);
+		sprite.setTexture(texture);
+	}
 
 	body.width = static_cast<float>(texture.getSize().x);
 	body.height = static_cast<float>(texture.getSize().y);
 
-	
 	WorldInstance::getInstance().addAliveObject(this);
 	Renderer::getInstance().addRenderableObject(this);
 	CollisionEngine::getInstance().addCollisionObject(this);
@@ -21,6 +24,17 @@ Entity::Entity(std::string texturePath, int depth)
 Entity::~Entity()
 {
 }
+
+
+void Entity::setTexture(std::string texturePath)
+{
+	texture.loadFromFile(texturePath);
+	texture.setRepeated(true);
+	sprite.setTexture(texture);
+	body.width = static_cast<float>(texture.getSize().x);
+	body.height = static_cast<float>(texture.getSize().y);
+}
+
 
 void Entity::destroy() const
 {
@@ -38,29 +52,8 @@ void Entity::destroy() const
 	{
 		Renderer::getInstance().removeRenderableObject(posRO);
 	}
-
-	auto posAO = std::find_if(WorldInstance::getInstance().getAliveObjects().begin(), WorldInstance::getInstance().getAliveObjects().end(),
-							[this](auto obj) { return this->id == obj->id; });
-	if (posAO != WorldInstance::getInstance().getAliveObjects().end())
-	{
-		WorldInstance::getInstance().removeAliveObject(posAO);
-	}
-
-	auto posCO = std::find_if(CollisionEngine::getInstance().getCollisionObjects().begin(), 
-		CollisionEngine::getInstance().getCollisionObjects().end(),
-		[this](CollisionObject* obj) {
-		if (dynamic_cast<Entity*>(obj))
-		{
-			return this->id == (dynamic_cast<Entity*>(obj))->id;
-		}
-		else
-		{
-			return false;
-		}});
-	if (posCO != CollisionEngine::getInstance().getCollisionObjects().end())
-	{
-		CollisionEngine::getInstance().removeCollisionObject(posCO);
-	}
+	WorldInstance::getInstance().removeAliveObject(id);
+	CollisionEngine::getInstance().removeCollisionObject(id);
 }
 
 void Entity::setScale(sf::Vector2f scale)
@@ -68,5 +61,32 @@ void Entity::setScale(sf::Vector2f scale)
 	sprite.setScale(scale);
 	body.width *= scale.x;
 	body.height *= scale.y;
+}
+
+void Entity::move(sf::Vector2f offset)
+{
+	sprite.move(offset);
+	body.left = sprite.getPosition().x;
+	body.top = sprite.getPosition().y;
+}
+
+void Entity::move(float offsetX, float offsetY)
+{
+	sprite.move(offsetX, offsetY);
+	body.left = sprite.getPosition().x;
+	body.top = sprite.getPosition().y;
+}
+
+void Entity::setPosition(sf::Vector2f position)
+{
+	sprite.setPosition(position);
+	body.left = sprite.getPosition().x;
+	body.top = sprite.getPosition().y;
+}
+void Entity::setPosition(float posX, float posY)
+{
+	sprite.setPosition(posX, posY);
+	body.left = sprite.getPosition().x;
+	body.top = sprite.getPosition().y;
 }
 
