@@ -4,6 +4,7 @@
 WorldElement::WorldElement(std::string texturePath, int depth)
 	: Entity(texturePath, depth)
 {
+	movable = true;
 }
 
 WorldElement::~WorldElement()

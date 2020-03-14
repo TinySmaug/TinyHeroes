@@ -109,14 +109,36 @@ void PlayerCharacter::onCollision(CollisionObject & other)
 	{
 		//set hurt texture
 	}
-	else
+	else if(other.isMovable())
 	{
 		if (intersectionRect.width < 0.0f || intersectionRect.width > 0.0f)
 		{
 			//collision on the left || right
 			playerState.pushing = true;
 		}
-
+		if (intersectionRect.height < 0.0f)
+		{
+			//collision on the bottom
+			move(0.0f, intersectionRect.height);
+			velocity.y = 0.0f;
+			canJump = true;
+			playerState.jumping = false;
+		}
+		else if (intersectionRect.height > 0.0f)
+		{
+			//collision on the top
+			move(0.0f, intersectionRect.height);
+			velocity.y = 0.0f;
+		}
+	}
+	else
+	{
+		if (intersectionRect.width < 0.0f || intersectionRect.width > 0.0f)
+		{
+			//collision on the left || right
+			move(intersectionRect.width, 0.0f);
+			velocity.x = 0.0f;
+		}
 		if (intersectionRect.height < 0.0f)
 		{
 			//collision on the bottom

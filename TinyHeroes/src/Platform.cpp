@@ -4,6 +4,7 @@
 Platform::Platform(std::string texturePath, int depth)
 	: Entity(texturePath, depth)
 {
+	movable = false;
 }
 
 

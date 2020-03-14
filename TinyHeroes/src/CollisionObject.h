@@ -10,9 +10,11 @@ public:
 	virtual void onCollision(CollisionObject & other) = 0;
 
 	bool checkCollision(CollisionObject& other);
+	bool isMovable() { return movable; };
 
 protected:
 	sf::FloatRect intersectionRect;
+	bool movable;
 
 private:
 	sf::FloatRect& body;
