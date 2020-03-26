@@ -14,7 +14,7 @@ public:
 	void setPosition(float xPos, float yPos);
 	void setScale(float xScale, float yScale);
 
-	bool containsPoint(sf::Vector2i point) { return hidden ? false : body.contains(sf::Vector2f(point)); };
+	bool containsPoint(sf::Vector2f point) { return hidden ? false : body.contains(point); };
 
 private:
 	sf::FloatRect body;

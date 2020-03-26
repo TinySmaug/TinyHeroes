@@ -10,7 +10,6 @@ public:
 
 	void render();
 	sf::FloatRect getRenderableArea();
-	//void setTexture(std::string file, int layerNum);
 
 	void update(float deltaTime);
 

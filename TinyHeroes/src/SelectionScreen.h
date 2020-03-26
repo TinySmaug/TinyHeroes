@@ -14,6 +14,8 @@ public:
 	void removeInputHandlerFunctions();
 	std::string getChosenHeroFilePath() { return chosenHeroFilePath; };
 
+	void destroyIcons();
+
 public:
 	bool heroSelectionComplete;
 	bool backgroundSelectionComplete;

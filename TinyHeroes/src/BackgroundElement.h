@@ -10,7 +10,6 @@ public:
 	~BackgroundElement();
 
 	void render();
-
 	void update(float velocity, float deltaTime);
 	void checkBounds(float velocity, float deltaTime);
 

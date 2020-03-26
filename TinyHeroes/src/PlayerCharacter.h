@@ -7,11 +7,11 @@ class PlayerCharacter : public Entity
 public:
 	PlayerCharacter(std::string texturePath, int depth);
 	~PlayerCharacter();
-	PlayerCharacter& operator= (PlayerCharacter& other);
 
 	void update(float deltaTime);
 	void render() override;
 	void onCollision(CollisionObject & other);
+	void onCollisionEnd(CollisionObject & other);
 
 	void addInputHandlerFunctions();
 	void removeInputHandlerFunctions();
@@ -56,5 +56,8 @@ private:
 	bool canAttack;
 	bool canWalkAttack;
 	float jumpHeight;
+	bool movingLeft;
+	bool movingRight;
+	float attackBodyIncrease;
 };
 

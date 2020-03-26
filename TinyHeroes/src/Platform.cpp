@@ -21,6 +21,10 @@ void Platform::onCollision(CollisionObject & other)
 {
 }
 
+void Platform::onCollisionEnd(CollisionObject & other)
+{
+}
+
 void Platform::update(float deltaTime)
 {
 }

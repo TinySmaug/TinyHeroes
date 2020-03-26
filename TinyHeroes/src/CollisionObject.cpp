@@ -28,5 +28,9 @@ bool CollisionObject::checkCollision(CollisionObject & other)
 		other.intersectionRect.height = intersectionRect.height * -1.0f;
 		return true;
 	}
+	intersectionRect.width = 0.0f;
+	intersectionRect.height = 0.0f;
+	other.intersectionRect.width = 0.0f;
+	other.intersectionRect.height = 0.0f;
 	return false;
 }

@@ -11,6 +11,8 @@ Entity::Entity(std::string texturePath, int depth)
 		texture.loadFromFile(texturePath);
 		texture.setRepeated(true);
 		sprite.setTexture(texture);
+		filePath = texturePath;
+		setAnimations();
 	}
 
 	body.width = static_cast<float>(texture.getSize().x);
@@ -25,15 +27,36 @@ Entity::~Entity()
 {
 }
 
-
 void Entity::setTexture(std::string texturePath)
 {
-	texture.loadFromFile(texturePath);
-	texture.setRepeated(true);
-	sprite.setTexture(texture);
-	body.width = static_cast<float>(texture.getSize().x);
-	body.height = static_cast<float>(texture.getSize().y);
+	if (texturePath.length() != 0)
+	{
+		texture.loadFromFile(texturePath);
+		texture.setRepeated(true);
+		sprite.setTexture(texture);
+		body.width = static_cast<float>(texture.getSize().x);
+		body.height = static_cast<float>(texture.getSize().y);
+		filePath = texturePath;
+		setAnimations();
+	}
 }
+
+void Entity::setAnimations()
+{
+	std::string animationTxtPath = filePath;
+	auto dotPosition = animationTxtPath.find_last_of('.');
+	if (dotPosition != std::string::npos)
+	{
+		animationTxtPath.replace(animationTxtPath.begin() + dotPosition + 1, animationTxtPath.end(), "txt");
+	}
+	else
+	{
+		//wrong file path
+	}
+	animation.setAnimations(animationTxtPath);
+	animation.setSprite(sprite);
+}
+
 
 
 void Entity::destroy() const
@@ -89,4 +112,3 @@ void Entity::setPosition(float posX, float posY)
 	body.left = sprite.getPosition().x;
 	body.top = sprite.getPosition().y;
 }
-

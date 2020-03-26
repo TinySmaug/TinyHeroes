@@ -8,6 +8,7 @@ public:
 	virtual ~CollisionObject();
 
 	virtual void onCollision(CollisionObject & other) = 0;
+	virtual void onCollisionEnd(CollisionObject & other) = 0;
 
 	bool checkCollision(CollisionObject& other);
 	bool isMovable() { return movable; };

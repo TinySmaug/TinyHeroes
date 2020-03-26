@@ -9,8 +9,8 @@ BackgroundElement::BackgroundElement(std::string file)
 	layerTexture.loadFromFile(file);
 
 	sf::Vector2u bgTextureSize = layerTexture.getSize();
-	sf::Vector2f bgTextureScale(static_cast<float>(Renderer::getInstance().getWindow().getSize().x) / bgTextureSize.x,
-								static_cast<float>(Renderer::getInstance().getWindow().getSize().y) / bgTextureSize.y);
+	sf::Vector2f bgTextureScale(static_cast<float>(Renderer::getInstance().getView().getSize().x) / bgTextureSize.x,
+		static_cast<float>(Renderer::getInstance().getView().getSize().y) / bgTextureSize.y);
 
 	backgroundLayer.setTexture(layerTexture);
 	backgroundLayer.scale(bgTextureScale);

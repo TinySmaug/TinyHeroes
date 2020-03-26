@@ -9,6 +9,7 @@ public:
 
 	void render() override;
 	void onCollision(CollisionObject & other);
+	void onCollisionEnd(CollisionObject & other);
 	void update(float deltaTime);
 	void setSize(int width, int height);
 };

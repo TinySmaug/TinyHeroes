@@ -56,6 +56,35 @@ void CollisionEngine::updateCollisionObjectsVector()
 	objectsToRemove.clear();
 }
 
+void CollisionEngine::addCollidedObjects(CollisionObject * first, CollisionObject * second)
+{
+	collidedObjects.emplace_back(std::make_pair(first, second));
+}
+
+void CollisionEngine::removeCollidedObjects(CollisionObject * first, CollisionObject * second)
+{
+	for (auto i = collidedObjects.begin(); i != collidedObjects.end(); i++)
+	{
+		if ((*i).first == first && (*i).second == second)
+		{
+			collidedObjects.erase(i);
+			break;
+		}
+	}
+}
+
+bool CollisionEngine::areCollidedObjects(CollisionObject * first, CollisionObject * second)
+{
+	for (auto i = collidedObjects.begin(); i != collidedObjects.end(); i++)
+	{
+		if ((*i).first == first && (*i).second == second)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 void CollisionEngine::checkCollisions()
 {
 	updateCollisionObjectsVector();
@@ -66,8 +95,21 @@ void CollisionEngine::checkCollisions()
 		{
 			if ((*i)->checkCollision(*(*j)))
 			{
+				if (!areCollidedObjects((*i), (*j)))
+				{
+					addCollidedObjects((*i), (*j));
+				}
 				(*i)->onCollision(*(*j));
 				(*j)->onCollision(*(*i));
+			}
+			else
+			{
+				if (areCollidedObjects((*i), (*j)))
+				{
+					removeCollidedObjects((*i), (*j));
+					(*i)->onCollisionEnd(*(*j));
+					(*j)->onCollisionEnd(*(*i));
+				}
 			}
 		}
 	}

@@ -8,6 +8,7 @@ Renderer::Renderer()
 {
 	window = new sf::RenderWindow(sf::VideoMode(1280, 600), "Tiny Heroes", sf::Style::Close | sf::Style::Resize);
 	view = new sf::View(sf::Vector2f(window->getSize().x/2.0f, window->getSize().y / 2.0f), sf::Vector2f(window->getSize()));
+	view->setViewport(sf::FloatRect(0.0f, 0.0f, 1.0f, 1.0f));
 	window->setView(getView());
 }
 

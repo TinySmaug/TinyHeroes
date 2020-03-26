@@ -30,6 +30,10 @@ protected:
 	sf::Sprite sprite;
 	sf::Texture texture;
 	sf::FloatRect body;
+	std::string filePath;
 	Animation animation;
+
+private:
+	void setAnimations();
 };
 

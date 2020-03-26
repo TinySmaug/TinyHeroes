@@ -36,6 +36,10 @@ void WorldElement::onCollision(CollisionObject & other)
 	}
 }
 
+void WorldElement::onCollisionEnd(CollisionObject & other)
+{
+}
+
 void WorldElement::update(float deltaTime)
 {
 	velocity.x = 0.0f;

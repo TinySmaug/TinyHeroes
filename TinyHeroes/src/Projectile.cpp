@@ -10,7 +10,8 @@ Projectile::Projectile(std::string texturePath, int depth, float speed, sf::Vect
 	sprite.setScale(sf::Vector2f(3.0f, 3.0f));
 	startingPosition = position;
 	flyUpwards = true;
-	this->speed = speed == 0.0f ? faceRight ? 500.0f : -500.0f : speed * 3.0f;
+	maxHeight = 50.0f;
+	this->speed = speed == 0.0f ? faceRight ? 400.0f : -400.0f : speed * 2.0f;
 }
 
 Projectile::~Projectile()
@@ -26,7 +27,7 @@ void Projectile::update(float deltaTime)
 {
 	if (flyUpwards)
 	{
-		velocity.y = -sqrtf(2.0f * 981.0f * 50.0f);
+		velocity.y = -sqrtf(2.0f * 981.0f * maxHeight);
 		flyUpwards = false;
 	}
 	velocity.y += WorldInstance::getInstance().getGravity() * deltaTime;
@@ -37,4 +38,8 @@ void Projectile::update(float deltaTime)
 void Projectile::onCollision(CollisionObject & other)
 {
 	destroy();
+}
+
+void Projectile::onCollisionEnd(CollisionObject & other)
+{
 }

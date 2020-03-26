@@ -27,15 +27,16 @@ int main()
 	pause.setFont(font);
 	pause.setString("Pause");
 	pause.setCharacterSize(56);
+	pause.setOutlineColor(sf::Color::Black);
+	pause.setOutlineThickness(3.0f);
 
 	bool selectionComplete = false;
 	SelectionScreen selectionScreen;
 	selectionScreen.heroSelectionComplete = false;
 
-	PlayerCharacter player = PlayerCharacter("", 0);
-	
+	PlayerCharacter player("", 0);
 
-	WorldElement rock = WorldElement("World/Rock2.png", 0);
+	WorldElement rock("World/Rock2.png", 0);
 	rock.setPosition(sf::Vector2f(-300.0f + 1280.0f + 150.0f + 200.0f, 496.0f));
 	rock.setScale(sf::Vector2f(4.0f, 4.0f));
 
@@ -63,12 +64,6 @@ int main()
 				}
 			/*
 			case sf::Event::Resized:
-				if (!selectionComplete)
-				{
-					renderer.getView().setCenter(renderer.getWindow().getSize().x / 2.0f, renderer.getWindow().getSize().y / 2.0f);
-					renderer.getView().setSize(sf::Vector2f(renderer.getWindow().getSize()));
-					renderer.getWindow().setView(renderer.getView());
-				}
 				break;
 			*/
 			/*
@@ -97,6 +92,10 @@ int main()
 				player.setTexture(selectionScreen.getChosenHeroFilePath());
 				player.setPosition(0.0f, 400.0f);
 				player.setScale(sf::Vector2f(3.0f, 3.0f));
+
+				selectionScreen.destroyIcons();
+
+				player.addInputHandlerFunctions();
 			}
 		}
 		else if (renderer.getWindow().hasFocus() || DEBUG)
@@ -111,8 +110,6 @@ int main()
 			}
 
 			renderer.getWindow().clear();
-
-			player.addInputHandlerFunctions();
 
 			inputManager.update(deltaTime);
 

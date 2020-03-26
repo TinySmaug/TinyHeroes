@@ -10,12 +10,14 @@ public:
 	void render();
 	void update(float deltaTime);
 	void onCollision(CollisionObject & other);
+	void onCollisionEnd(CollisionObject & other);
 
 private:
 	sf::Vector2f velocity;
 	sf::Vector2f startingPosition;
 	float speed;
 	bool flyUpwards;
+	float maxHeight;
 	bool faceRight;
 };
 

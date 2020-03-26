@@ -43,19 +43,6 @@ sf::FloatRect Background::getRenderableArea()
 	return body;
 }
 
-/*
-void Background::setTexture(std::string file, int layerNum)
-{
-	for (int i = 0; i < layerNum; i++)
-	{
-		std::string path = file;
-		path.append("/").append(std::to_string(i)).append(".png");
-
-		background.push_back(new BackgroundElement(path));
-	}
-}
-*/
-
 void Background::update(float deltaTime)
 {
 	float layerMultiplier = 0.5f;

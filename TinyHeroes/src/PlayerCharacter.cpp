@@ -8,7 +8,6 @@
 PlayerCharacter::PlayerCharacter(std::string texturePath, int depth)
 	: Entity(texturePath, depth)
 {
-	animation.currentAnimationInfo.faceRight = true;
 	canJump = true;
 	canThrow = true;
 	canAttack = true;
@@ -23,34 +22,12 @@ PlayerCharacter::PlayerCharacter(std::string texturePath, int depth)
 	acceleration = 50.0f;
 	maxSpeed = 200.0f;
 	jumpHeight = 100.0f;
-
-	sf::Texture animationTexture;
-	animationTexture.loadFromFile("Heroes/PinkMonster/Idle_4.png");
-	animation.animationTextures.push_back(animationTexture);
-	animationTexture.loadFromFile("Heroes/PinkMonster/Walk_6.png");
-	animation.animationTextures.push_back(animationTexture);
-	animationTexture.loadFromFile("Heroes/PinkMonster/Run_6.png");
-	animation.animationTextures.push_back(animationTexture);
-	animationTexture.loadFromFile("Heroes/PinkMonster/Jump_8.png");
-	animation.animationTextures.push_back(animationTexture);
-	animationTexture.loadFromFile("Heroes/PinkMonster/Throw_4.png");
-	animation.animationTextures.push_back(animationTexture);
-	animationTexture.loadFromFile("Heroes/PinkMonster/Push_6.png");
-	animation.animationTextures.push_back(animationTexture);
-	animationTexture.loadFromFile("Heroes/PinkMonster/Attack_6.png");
-	animation.animationTextures.push_back(animationTexture);
-	animationTexture.loadFromFile("Heroes/PinkMonster/WalkAttack_6.png");
-	animation.animationTextures.push_back(animationTexture);
+	attackBodyIncrease = 20.0f;
 }
 
 
 PlayerCharacter::~PlayerCharacter()
 {
-}
-
-PlayerCharacter & PlayerCharacter::operator=(PlayerCharacter & other)
-{
-	return other;
 }
 
 void PlayerCharacter::update(float deltaTime)
@@ -63,12 +40,6 @@ void PlayerCharacter::update(float deltaTime)
 		playerState.attacking = true;
 	if (!canWalkAttack)
 		playerState.walkAttack = true;
-	if (intersectionRect.height == 0.0f)
-	{
-		playerState.pushing = false;
-	}
-	
-	setCurrentAnimationInfo();
 	
 	velocity.y += WorldInstance::getInstance().getGravity() * deltaTime; //adding gravity to go down
 
@@ -90,9 +61,9 @@ void PlayerCharacter::update(float deltaTime)
 		velocity.x = 0.0f;
 	}
 
+	setCurrentAnimationInfo();
 	animation.update(deltaTime);
-	sprite.setTextureRect(animation.uvRect);
-	sprite.setTexture(animation.animationTextures[animation.currentAnimationInfo.animationIndex]);
+	
 	move(velocity * deltaTime);
 
 	WorldInstance::getInstance().setWorldSpeed(velocity.x);
@@ -156,6 +127,17 @@ void PlayerCharacter::onCollision(CollisionObject & other)
 	}
 }
 
+void PlayerCharacter::onCollisionEnd(CollisionObject & other)
+{
+	if (other.isMovable())
+	{
+		playerState.pushing = false;
+	}
+	else
+	{
+	}
+}
+
 void PlayerCharacter::addInputHandlerFunctions()
 {
 	InputManager::InputHandlerData tmp;
@@ -198,96 +180,71 @@ void PlayerCharacter::removeInputHandlerFunctions()
 
 void PlayerCharacter::setCurrentAnimationInfo()
 {
-	float runningSwitchTime = 0.1f;
-	float walkingSwitchTime = 0.25f;
-	float jumpingSwitchTime = 0.2f;
-	float idleSwitchTime = 0.3f;
-	float throwSwitchTime = 0.08f;
-	float pushSwitchTime = 0.1f;
-	float attackSwitchTime = 0.2f;
-	float walkAttackSwitchTime = 0.2f;
-
 	if (playerState.attacking)
 	{
-		if (animation.currentAnimationInfo.currentImage >= 5)
+		if (animation.currentImage >= 5)
 		{
 			playerState.attacking = false;
 			canAttack = true;
 		}
 		else
 		{
-			animation.currentAnimationInfo.animationIndex = 6;
-			animation.currentAnimationInfo.imageCount = 6;
-			animation.currentAnimationInfo.switchTime = attackSwitchTime;
+			animation.setCurrentAnimationAs("attacking");
 		}
 	}
 	else if (playerState.throwing)
 	{
-		if (animation.currentAnimationInfo.currentImage >= 3)
+		if (animation.currentImage >= 3)
 		{
 			playerState.throwing = false;
 			canThrow = true;
+			animation.currentImage = 0;
 		}
 		else
 		{
-			animation.currentAnimationInfo.animationIndex = 4;
-			animation.currentAnimationInfo.imageCount = 4;
-			animation.currentAnimationInfo.switchTime = throwSwitchTime;
+			animation.setCurrentAnimationAs("throwing");
 		}
 	}
 	else if (playerState.jumping)
 	{
-		animation.currentAnimationInfo.animationIndex = 3;
-		animation.currentAnimationInfo.imageCount = 8;
-		animation.currentAnimationInfo.switchTime = jumpingSwitchTime;
+		animation.setCurrentAnimationAs("jumping");
 	}
 	else if (playerState.pushing)
 	{
-		animation.currentAnimationInfo.animationIndex = 5;
-		animation.currentAnimationInfo.imageCount = 6;
-		animation.currentAnimationInfo.switchTime = pushSwitchTime;
+		animation.setCurrentAnimationAs("pushing");
 	}
 	else if (playerState.running)
 	{
-		animation.currentAnimationInfo.animationIndex = 2;
-		animation.currentAnimationInfo.imageCount = 6;
-		animation.currentAnimationInfo.switchTime = runningSwitchTime;
+		animation.setCurrentAnimationAs("running");
 	}
 	else if (playerState.walkAttack)
 	{
-		if (animation.currentAnimationInfo.currentImage >= 3)
+		if (animation.currentImage >= 3)
 		{
 			playerState.walkAttack = false;
 			canWalkAttack = true;
 		}
 		else
 		{
-			animation.currentAnimationInfo.animationIndex = 7;
-			animation.currentAnimationInfo.imageCount = 6;
-			animation.currentAnimationInfo.switchTime = walkAttackSwitchTime;
+			animation.setCurrentAnimationAs("walkAttack");
 		}
 	}
 	else if (playerState.walking)
 	{
-		animation.currentAnimationInfo.animationIndex = 1;
-		animation.currentAnimationInfo.imageCount = 6;
-		animation.currentAnimationInfo.switchTime = walkingSwitchTime;
+		animation.setCurrentAnimationAs("walking");
 	}
 	else
 	{
-		animation.currentAnimationInfo.animationIndex = 0;
-		animation.currentAnimationInfo.imageCount = 4;
-		animation.currentAnimationInfo.switchTime = idleSwitchTime;
+		animation.setCurrentAnimationAs("idle");
 	}
 }
 
 void PlayerCharacter::throwRock()
 {
 	sf::Vector2f position = sprite.getPosition();
-	position.x += animation.currentAnimationInfo.faceRight ? body.width : 0.0f;
+	position.x += animation.isAnimationFacingRight() ? body.width : 0.0f;
 	position.y += body.height / 3.0f;
-	Projectile* rock = new Projectile("World/Rock1.png", getRenderDepth(), velocity.x, position,
-						   animation.currentAnimationInfo.faceRight);
+	Projectile* rock = new Projectile("World/Rock1.png", getRenderDepth(), velocity.x, position, animation.isAnimationFacingRight());
 }
 
 void PlayerCharacter::handleLeftMouseButtonClick(float deltaTime)
@@ -296,38 +253,44 @@ void PlayerCharacter::handleLeftMouseButtonClick(float deltaTime)
 	{
 		playerState.throwing = true;
 		canThrow = false;
-		animation.currentAnimationInfo.currentImage = 0;
 		throwRock();
 	}
 }
 
 void PlayerCharacter::handleRightMouseButtonClick(float deltaTime)
 {
-	if (playerState.walking && canWalkAttack)
+	if (playerState.walking && canWalkAttack && !playerState.running)
 	{
 		playerState.walkAttack = true;
 		canWalkAttack = false;
-		animation.currentAnimationInfo.currentImage = 0;
 	}
 	else if (canAttack && !playerState.running && !playerState.walking)
 	{
 		playerState.attacking = true;
-		animation.currentAnimationInfo.currentImage = 0;
+		canAttack = false;
 	}
 }
 
 void PlayerCharacter::handleAKeyboardButtonPressed(float deltaTime)
 {
-	playerState.walking = true;
-	velocity.x -= (acceleration * speedMultiplier);
-	animation.currentAnimationInfo.faceRight = false;
+	if (!movingRight)
+	{
+		playerState.walking = true;
+		velocity.x -= (acceleration * speedMultiplier);
+		animation.setAnimationFaceRight(false);
+		movingLeft = true;
+	}
 }
 
 void PlayerCharacter::handleDKeyboardButtonPressed(float deltaTime)
 {
-	playerState.walking = true;
-	velocity.x += (acceleration * speedMultiplier);
-	animation.currentAnimationInfo.faceRight = true;
+	if (!movingLeft)
+	{
+		playerState.walking = true;
+		velocity.x += (acceleration * speedMultiplier);
+		animation.setAnimationFaceRight(true);
+		movingRight = true;
+	}
 }
 
 void PlayerCharacter::handleSpaceKeyboardButtonPressed(float deltaTime)
@@ -338,16 +301,20 @@ void PlayerCharacter::handleSpaceKeyboardButtonPressed(float deltaTime)
 		canJump = false;
 		//square root( 2.0f * gravity * jumpHeight)
 		velocity.y = -sqrtf(2.0f * 981.0f * jumpHeight);
-		animation.currentAnimationInfo.currentImage = 0;
 	}
 }
 
 void PlayerCharacter::handleLShiftKeyboardButtonPressed(float deltaTime)
 {
-	if (playerState.walking && canJump)
+	if (playerState.walking && canJump && !playerState.pushing)
 	{
 		speedMultiplier = 2.0f;
 		playerState.running = true;
+	}
+	else if (playerState.pushing)
+	{
+		speedMultiplier = 1.0f;
+		playerState.running = false;
 	}
 }
 
@@ -358,7 +325,6 @@ void PlayerCharacter::handleLeftMouseButtonReleased(float deltaTime)
 
 void PlayerCharacter::handleRightMouseButtonReleased(float deltaTime)
 {
-
 }
 
 void PlayerCharacter::handleAKeyboardButtonReleased(float deltaTime)
@@ -367,7 +333,7 @@ void PlayerCharacter::handleAKeyboardButtonReleased(float deltaTime)
 	//velocity.x *= 0.0f; //slowly stop moving (higher number=slower stop time, lower number=faster stop time)
 	playerState.walking = false;
 	playerState.running = false;
-	playerState.pushing = false;
+	movingLeft = false;
 }
 
 void PlayerCharacter::handleDKeyboardButtonReleased(float deltaTime)
@@ -375,7 +341,7 @@ void PlayerCharacter::handleDKeyboardButtonReleased(float deltaTime)
 	velocity.x = 0.0f;
 	playerState.walking = false;
 	playerState.running = false;
-	playerState.pushing = false;
+	movingRight = false;
 }
 
 void PlayerCharacter::handleSpaceKeyboardButtonReleased(float deltaTime)
