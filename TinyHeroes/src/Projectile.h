@@ -4,7 +4,7 @@
 class Projectile : public Entity
 {
 public:
-	Projectile(std::string texturePath, int depth, float speed, sf::Vector2f position, bool faceRight);
+	Projectile(std::string texturePath, int depth, float kineticEnergy, sf::Vector2f position, bool faceRight);
 	~Projectile();
 
 	void render();
@@ -13,11 +13,9 @@ public:
 	void onCollisionEnd(CollisionObject & other);
 
 private:
-	sf::Vector2f velocity;
-	sf::Vector2f startingPosition;
-	float speed;
-	bool flyUpwards;
-	float maxHeight;
-	bool faceRight;
+	sf::Vector2f m_velocity;
+	float m_speed;
+	bool m_flyUpwards;
+	float m_maxHeight;
 };
 

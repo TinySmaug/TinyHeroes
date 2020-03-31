@@ -10,6 +10,7 @@
 
 #include "src\PlayerCharacter.h"
 #include "src\WorldElement.h"
+#include "src\Enemy.h"
 
 #define DEBUG 0
 
@@ -34,11 +35,20 @@ int main()
 	SelectionScreen selectionScreen;
 	selectionScreen.heroSelectionComplete = false;
 
-	PlayerCharacter player("", 0);
+	sf::Text fps;
+	fps.setFont(font);
+	fps.setCharacterSize(20);
+	fps.setOutlineColor(sf::Color::Black);
+	fps.setOutlineThickness(3.0f);
 
-	WorldElement rock("World/Rock2.png", 0);
+	PlayerCharacter player("", 1);
+
+	WorldElement rock("World/Rock.png", 1);
 	rock.setPosition(sf::Vector2f(-300.0f + 1280.0f + 150.0f + 200.0f, 496.0f));
 	rock.setScale(sf::Vector2f(4.0f, 4.0f));
+
+	Enemy reaper("Enemies/GreenReaper/Green_Reaper.png", 1);
+	reaper.setPosition(reaper.startingPosition);
 
 	float deltaTime = 0.0f;
 	sf::Clock clock;
@@ -46,8 +56,8 @@ int main()
 	while (renderer.getWindow().isOpen())
 	{
 		deltaTime = clock.restart().asSeconds();
-		if (deltaTime > 1.0f / 20.0f) //20fps minimum always
-			deltaTime = 1.0f / 20.0f;
+		if (deltaTime > 1.0f / 5.0f)
+			deltaTime = 1.0f / 5.0f;
 
 		sf::Event e;
 		while (renderer.getWindow().pollEvent(e))
@@ -121,6 +131,14 @@ int main()
 			renderer.getWindow().setView(renderer.getView());
 
 			renderer.renderObjects();
+
+			if (DEBUG)
+			{
+				fps.setString(std::to_string(1.0f / deltaTime));
+				fps.setPosition(WorldInstance::getInstance().getPlayerPosition().x - 270.0f, 0.0f);
+				renderer.getWindow().draw(fps);
+			}
+
 			renderer.getWindow().display();
 		}
 	}

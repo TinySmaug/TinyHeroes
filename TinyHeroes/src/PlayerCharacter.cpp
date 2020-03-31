@@ -1,9 +1,10 @@
 #include "PlayerCharacter.h"
 #include "Renderer.h"
 #include "WorldInstance.h"
-#include "Projectile.h"
 #include "InputManager.h"
 
+#include "Projectile.h"
+#include "Enemy.h"
 
 PlayerCharacter::PlayerCharacter(std::string texturePath, int depth)
 	: Entity(texturePath, depth)
@@ -18,11 +19,11 @@ PlayerCharacter::PlayerCharacter(std::string texturePath, int depth)
 	playerState.pushing = false;
 	playerState.attacking = false;
 	playerState.walkAttack = false;
+	playerState.hurt = false;
 	speedMultiplier = 1.0f;
 	acceleration = 50.0f;
 	maxSpeed = 200.0f;
 	jumpHeight = 100.0f;
-	attackBodyIncrease = 20.0f;
 }
 
 
@@ -78,7 +79,14 @@ void PlayerCharacter::onCollision(CollisionObject & other)
 {
 	if (dynamic_cast<Projectile*>(&other))
 	{
-		//set hurt texture
+		playerState.hurt = true;
+	}
+	else if (dynamic_cast<Enemy*>(&other))
+	{
+		if (!(dynamic_cast<Enemy*>(&other)->isDead()))
+		{
+			playerState.hurt = true;
+		}
 	}
 	else if(other.isMovable())
 	{
@@ -180,16 +188,31 @@ void PlayerCharacter::removeInputHandlerFunctions()
 
 void PlayerCharacter::setCurrentAnimationInfo()
 {
-	if (playerState.attacking)
+	if (playerState.hurt)
+	{
+		if (animation.currentImage >= 3)
+		{
+			playerState.hurt = false;
+			animation.currentImage = 0;
+		}
+		else
+		{
+			animation.setCurrentAnimationAs("hurt");
+			velocity.x = 0.0f;
+		}
+	}
+	else if (playerState.attacking)
 	{
 		if (animation.currentImage >= 5)
 		{
 			playerState.attacking = false;
 			canAttack = true;
+			animation.currentImage = 0;
 		}
 		else
 		{
 			animation.setCurrentAnimationAs("attacking");
+			velocity.x = 0.0f;
 		}
 	}
 	else if (playerState.throwing)
@@ -203,6 +226,7 @@ void PlayerCharacter::setCurrentAnimationInfo()
 		else
 		{
 			animation.setCurrentAnimationAs("throwing");
+			velocity.x = 0.0f;
 		}
 	}
 	else if (playerState.jumping)
@@ -244,7 +268,7 @@ void PlayerCharacter::throwRock()
 	sf::Vector2f position = sprite.getPosition();
 	position.x += animation.isAnimationFacingRight() ? body.width : 0.0f;
 	position.y += body.height / 3.0f;
-	Projectile* rock = new Projectile("World/Rock1.png", getRenderDepth(), velocity.x, position, animation.isAnimationFacingRight());
+	Projectile* rock = new Projectile("Heroes/Rock.png", getRenderDepth(), velocity.x, position, animation.isAnimationFacingRight());
 }
 
 void PlayerCharacter::handleLeftMouseButtonClick(float deltaTime)

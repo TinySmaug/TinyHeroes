@@ -81,20 +81,22 @@ Animation::animationInfo& Animation::currentAnimation()
 
 void Animation::update(float deltaTime)
 {
+	animationInfo& currentAnimationVar = currentAnimation();
+
 	if (currentAnimationName != previousAnimationName || faceRight != previousFaceRight)
 	{
 		currentImage = 0;
 		currentFrameTime = 0.0f;
 	}
-	
+
 	currentFrameTime += deltaTime;
 
-	if (currentFrameTime >= currentAnimation().frameSwitchTime)
+	if (currentFrameTime >= currentAnimationVar.frameSwitchTime)
 	{
-		currentFrameTime -= currentAnimation().frameSwitchTime;
+		currentFrameTime -= currentAnimationVar.frameSwitchTime;
 		currentImage++;
 
-		if (currentImage >= currentAnimation().imageCount)
+		if (currentImage >= currentAnimationVar.imageCount)
 		{
 			currentImage = 0;
 		}
@@ -102,15 +104,15 @@ void Animation::update(float deltaTime)
 
 	if (faceRight)
 	{
-		currentAnimation().frameRect.left = currentImage * currentAnimation().frameRect.width;
-		currentAnimation().frameRect.width = abs(currentAnimation().frameRect.width);
+		currentAnimationVar.frameRect.left = currentImage * currentAnimationVar.frameRect.width;
+		currentAnimationVar.frameRect.width = abs(currentAnimationVar.frameRect.width);
 	}
 	else
 	{
-		currentAnimation().frameRect.left = (currentImage + 1) * abs(currentAnimation().frameRect.width);
-		currentAnimation().frameRect.width = -abs(currentAnimation().frameRect.width);
+		currentAnimationVar.frameRect.left = (currentImage + 1) * abs(currentAnimationVar.frameRect.width);
+		currentAnimationVar.frameRect.width = -abs(currentAnimationVar.frameRect.width);
 	}
 
-	sprite->setTextureRect(currentAnimation().frameRect);
-	sprite->setTexture(currentAnimation().animationTexture);
+	sprite->setTextureRect(currentAnimationVar.frameRect);
+	sprite->setTexture(currentAnimationVar.animationTexture);
 }

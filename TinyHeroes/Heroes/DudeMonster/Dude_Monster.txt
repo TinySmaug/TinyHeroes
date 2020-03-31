@@ -6,3 +6,4 @@ Run.png 6 running 0.6
 Throw.png 4 throwing 0.32
 Walk.png 6 walking 1.5
 WalkAttack.png 6 walkAttack 1.2
+Hurt.png 4 hurt 0.7

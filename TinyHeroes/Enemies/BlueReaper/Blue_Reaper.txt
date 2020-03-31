@@ -1,0 +1,6 @@
+Attack.png 7 attacking 1.2
+Hurt.png 9 hurt 1.2
+Idle.png 8 idle 1.0
+Throw.png 6 throwing 0.32
+Walking.png 8 walking 1.2
+Dying.png 8 dead 1.5

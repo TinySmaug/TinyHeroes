@@ -8,10 +8,10 @@ public:
 	PlayerCharacter(std::string texturePath, int depth);
 	~PlayerCharacter();
 
-	void update(float deltaTime);
+	void update(float deltaTime) override;
 	void render() override;
-	void onCollision(CollisionObject & other);
-	void onCollisionEnd(CollisionObject & other);
+	void onCollision(CollisionObject & other) override;
+	void onCollisionEnd(CollisionObject & other) override;
 
 	void addInputHandlerFunctions();
 	void removeInputHandlerFunctions();
@@ -45,6 +45,7 @@ private:
 		bool running;
 		bool pushing;
 		bool walking;
+		bool hurt;
 	} state;
 	state playerState;
 	sf::Vector2f velocity;
@@ -58,6 +59,5 @@ private:
 	float jumpHeight;
 	bool movingLeft;
 	bool movingRight;
-	float attackBodyIncrease;
 };
 
