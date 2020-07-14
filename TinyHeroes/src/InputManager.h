@@ -16,8 +16,8 @@ public:
 		bool wasActiveInPreviousFrame = false;
 	} InputHandlerData;
 
-	std::map<sf::Keyboard::Key, InputHandlerData >& getKeyboardEventHandlers() { return keyboardInputHandlers; };
-	std::map<sf::Mouse::Button, InputHandlerData >& getMouseEventHandlers() { return mouseInputHandlers; };
+	std::map<sf::Keyboard::Key, InputHandlerData >& getKeyboardEventHandlers() { return m_keyboardInputHandlers; };
+	std::map<sf::Mouse::Button, InputHandlerData >& getMouseEventHandlers() { return m_mouseInputHandlers; };
 
 	bool addKeyboardInputHandler(sf::Keyboard::Key, InputHandlerData);
 	bool addMouseInputHandler(sf::Mouse::Button, InputHandlerData);
@@ -32,7 +32,7 @@ private:
 	InputManager& operator=(InputManager const&) {};
 
 private:
-	std::map<sf::Keyboard::Key, InputHandlerData> keyboardInputHandlers;
-	std::map<sf::Mouse::Button, InputHandlerData> mouseInputHandlers;
+	std::map<sf::Keyboard::Key, InputHandlerData> m_keyboardInputHandlers;
+	std::map<sf::Mouse::Button, InputHandlerData> m_mouseInputHandlers;
 };
 

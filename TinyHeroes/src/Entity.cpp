@@ -4,19 +4,19 @@
 #include "CollisionEngine.h"
 
 Entity::Entity(std::string texturePath, int depth)
-	: CollisionObject(body), RenderableObject(depth)
+	: CollisionObject(m_body), RenderableObject(depth)
 {
 	if (texturePath.length() != 0)
 	{
-		texture.loadFromFile(texturePath);
-		texture.setRepeated(true);
-		sprite.setTexture(texture);
-		filePath = texturePath;
+		m_texture.loadFromFile(texturePath);
+		m_texture.setRepeated(true);
+		m_sprite.setTexture(m_texture);
+		m_filePath = texturePath;
 		setAnimations();
 	}
 
-	body.width = static_cast<float>(texture.getSize().x);
-	body.height = static_cast<float>(texture.getSize().y);
+	m_body.width = static_cast<float>(m_texture.getSize().x);
+	m_body.height = static_cast<float>(m_texture.getSize().y);
 
 	WorldInstance::getInstance().addAliveObject(this);
 	Renderer::getInstance().addRenderableObject(this);
@@ -31,19 +31,19 @@ void Entity::setTexture(std::string texturePath)
 {
 	if (texturePath.length() != 0)
 	{
-		texture.loadFromFile(texturePath);
-		texture.setRepeated(true);
-		sprite.setTexture(texture);
-		body.width = static_cast<float>(texture.getSize().x);
-		body.height = static_cast<float>(texture.getSize().y);
-		filePath = texturePath;
+		m_texture.loadFromFile(texturePath);
+		m_texture.setRepeated(true);
+		m_sprite.setTexture(m_texture);
+		m_body.width = static_cast<float>(m_texture.getSize().x);
+		m_body.height = static_cast<float>(m_texture.getSize().y);
+		m_filePath = texturePath;
 		setAnimations();
 	}
 }
 
 void Entity::setAnimations()
 {
-	std::string animationTxtPath = filePath;
+	std::string animationTxtPath = m_filePath;
 	auto dotPosition = animationTxtPath.find_last_of('.');
 	if (dotPosition != std::string::npos)
 	{
@@ -53,8 +53,8 @@ void Entity::setAnimations()
 	{
 		//wrong file path
 	}
-	animation.setAnimations(animationTxtPath);
-	animation.setSprite(sprite);
+	m_animation.setAnimations(animationTxtPath);
+	m_animation.setSprite(m_sprite);
 }
 
 
@@ -65,7 +65,7 @@ void Entity::destroy() const
 		[this](RenderableObject* obj) {
 		if (dynamic_cast<Entity*>(obj))
 		{
-			return this->id == (dynamic_cast<Entity*>(obj))->id;
+			return this->m_id == (dynamic_cast<Entity*>(obj))->m_id;
 		}
 		else
 		{
@@ -75,40 +75,40 @@ void Entity::destroy() const
 	{
 		Renderer::getInstance().removeRenderableObject(posRO);
 	}
-	WorldInstance::getInstance().removeAliveObject(id);
-	CollisionEngine::getInstance().removeCollisionObject(id);
+	WorldInstance::getInstance().removeAliveObject(m_id);
+	CollisionEngine::getInstance().removeCollisionObject(m_id);
 }
 
 void Entity::setScale(sf::Vector2f scale)
 {
-	sprite.setScale(scale);
-	body.width *= scale.x;
-	body.height *= scale.y;
+	m_sprite.setScale(scale);
+	m_body.width *= scale.x;
+	m_body.height *= scale.y;
 }
 
 void Entity::move(sf::Vector2f offset)
 {
-	sprite.move(offset);
-	body.left = sprite.getPosition().x;
-	body.top = sprite.getPosition().y;
+	m_sprite.move(offset);
+	m_body.left = m_sprite.getPosition().x;
+	m_body.top = m_sprite.getPosition().y;
 }
 
 void Entity::move(float offsetX, float offsetY)
 {
-	sprite.move(offsetX, offsetY);
-	body.left = sprite.getPosition().x;
-	body.top = sprite.getPosition().y;
+	m_sprite.move(offsetX, offsetY);
+	m_body.left = m_sprite.getPosition().x;
+	m_body.top = m_sprite.getPosition().y;
 }
 
 void Entity::setPosition(sf::Vector2f position)
 {
-	sprite.setPosition(position);
-	body.left = sprite.getPosition().x;
-	body.top = sprite.getPosition().y;
+	m_sprite.setPosition(position);
+	m_body.left = m_sprite.getPosition().x;
+	m_body.top = m_sprite.getPosition().y;
 }
 void Entity::setPosition(float posX, float posY)
 {
-	sprite.setPosition(posX, posY);
-	body.left = sprite.getPosition().x;
-	body.top = sprite.getPosition().y;
+	m_sprite.setPosition(posX, posY);
+	m_body.left = m_sprite.getPosition().x;
+	m_body.top = m_sprite.getPosition().y;
 }

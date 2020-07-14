@@ -9,16 +9,16 @@ public:
 	~SelectIcon();
 
 	void render();
-	sf::FloatRect getRenderableArea() { return body; };
+	sf::FloatRect getRenderableArea() { return m_body; };
 
 	void setPosition(float xPos, float yPos);
 	void setScale(float xScale, float yScale);
 
-	bool containsPoint(sf::Vector2f point) { return hidden ? false : body.contains(point); };
+	bool containsPoint(sf::Vector2f point) { return m_hidden ? false : m_body.contains(point); };
 
 private:
-	sf::FloatRect body;
-	sf::Sprite icon;
-	sf::Texture texture;
+	sf::FloatRect m_body;
+	sf::Sprite m_icon;
+	sf::Texture m_texture;
 };
 

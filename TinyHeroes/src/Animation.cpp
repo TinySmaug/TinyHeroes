@@ -5,9 +5,9 @@
 
 Animation::Animation()
 {
-	currentFrameTime = 0.0f;
-	currentImage = 0;
-	currentAnimationName = std::string("idle");
+	m_currentFrameTime = 0.0f;
+	m_currentImage = 0;
+	m_currentAnimationName = std::string("idle");
 }
 
 Animation::~Animation()
@@ -16,15 +16,15 @@ Animation::~Animation()
 
 void Animation::setAnimations(std::string txtFilePath)
 {
-	animationsFile.open(txtFilePath.c_str());
-	if (!animationsFile.is_open())
+	m_animationsFile.open(txtFilePath.c_str());
+	if (!m_animationsFile.is_open())
 	{
 		return;
 	}
 	auto slashPosition = txtFilePath.find_last_of('/');
 	std::string folderPath = txtFilePath.substr(0, slashPosition + 1);
 	std::string line;
-	while (std::getline(animationsFile, line))
+	while (std::getline(m_animationsFile, line))
 	{
 		animationInfo animation;
 
@@ -50,30 +50,30 @@ void Animation::setAnimations(std::string txtFilePath)
 		animation.frameRect.width = animation.animationTexture.getSize().x / static_cast<float>(animation.imageCount);
 		animation.frameRect.height = animation.animationTexture.getSize().y;
 
-		animations.emplace_back(animation);
+		m_animations.emplace_back(animation);
 	}	
 }
 
 void Animation::setCurrentAnimationAs(std::string animationName)
 {
-	previousAnimationName = currentAnimationName;
-	currentAnimationName = animationName;
+	m_previousAnimationName = m_currentAnimationName;
+	m_currentAnimationName = animationName;
 }
 
 void Animation::setAnimationFaceRight(bool right)
 {
-	previousFaceRight = faceRight;
-	faceRight = right;
+	m_previousFaceRight = m_faceRight;
+	m_faceRight = right;
 }
 
 Animation::animationInfo& Animation::currentAnimation()
 {
-	std::string animationName = currentAnimationName;
-	auto position = std::find_if(animations.begin(), animations.end(),
+	std::string animationName = m_currentAnimationName;
+	auto position = std::find_if(m_animations.begin(), m_animations.end(),
 		[&](animationInfo animation) { return animation.animationName == animationName; });
 	if (DEBUG)
 	{
-		assert(position != animations.end());
+		assert(position != m_animations.end());
 	}
 	return *position;
 }
@@ -83,36 +83,36 @@ void Animation::update(float deltaTime)
 {
 	animationInfo& currentAnimationVar = currentAnimation();
 
-	if (currentAnimationName != previousAnimationName || faceRight != previousFaceRight)
+	if (m_currentAnimationName != m_previousAnimationName || m_faceRight != m_previousFaceRight)
 	{
-		currentImage = 0;
-		currentFrameTime = 0.0f;
+		m_currentImage = 0;
+		m_currentFrameTime = 0.0f;
 	}
 
-	currentFrameTime += deltaTime;
+	m_currentFrameTime += deltaTime;
 
-	if (currentFrameTime >= currentAnimationVar.frameSwitchTime)
+	if (m_currentFrameTime >= currentAnimationVar.frameSwitchTime)
 	{
-		currentFrameTime -= currentAnimationVar.frameSwitchTime;
-		currentImage++;
+		m_currentFrameTime -= currentAnimationVar.frameSwitchTime;
+		m_currentImage++;
 
-		if (currentImage >= currentAnimationVar.imageCount)
+		if (m_currentImage >= currentAnimationVar.imageCount)
 		{
-			currentImage = 0;
+			m_currentImage = 0;
 		}
 	}
 
-	if (faceRight)
+	if (m_faceRight)
 	{
-		currentAnimationVar.frameRect.left = currentImage * currentAnimationVar.frameRect.width;
+		currentAnimationVar.frameRect.left = m_currentImage * currentAnimationVar.frameRect.width;
 		currentAnimationVar.frameRect.width = abs(currentAnimationVar.frameRect.width);
 	}
 	else
 	{
-		currentAnimationVar.frameRect.left = (currentImage + 1) * abs(currentAnimationVar.frameRect.width);
+		currentAnimationVar.frameRect.left = (m_currentImage + 1) * abs(currentAnimationVar.frameRect.width);
 		currentAnimationVar.frameRect.width = -abs(currentAnimationVar.frameRect.width);
 	}
 
-	sprite->setTextureRect(currentAnimationVar.frameRect);
-	sprite->setTexture(currentAnimationVar.animationTexture);
+	m_sprite->setTextureRect(currentAnimationVar.frameRect);
+	m_sprite->setTexture(currentAnimationVar.animationTexture);
 }

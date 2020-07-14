@@ -13,5 +13,5 @@ public:
 	void update(float deltaTime);
 
 private:
-	sf::Vector2f velocity;
+	sf::Vector2f m_velocity;
 };

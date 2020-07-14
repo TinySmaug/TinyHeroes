@@ -9,21 +9,21 @@
 PlayerCharacter::PlayerCharacter(std::string texturePath, int depth)
 	: Entity(texturePath, depth)
 {
-	canJump = true;
-	canThrow = true;
-	canAttack = true;
-	canWalkAttack = true;
-	playerState.jumping = false;
-	playerState.running = false;
-	playerState.throwing = false;
-	playerState.pushing = false;
-	playerState.attacking = false;
-	playerState.walkAttack = false;
-	playerState.hurt = false;
-	speedMultiplier = 1.0f;
-	acceleration = 50.0f;
-	maxSpeed = 200.0f;
-	jumpHeight = 100.0f;
+	m_canJump = true;
+	m_canThrow = true;
+	m_canAttack = true;
+	m_canWalkAttack = true;
+	m_playerState.jumping = false;
+	m_playerState.running = false;
+	m_playerState.throwing = false;
+	m_playerState.pushing = false;
+	m_playerState.attacking = false;
+	m_playerState.walkAttack = false;
+	m_playerState.hurt = false;
+	m_speedMultiplier = 1.0f;
+	m_acceleration = 50.0f;
+	m_maxSpeed = 200.0f;
+	m_jumpHeight = 100.0f;
 }
 
 
@@ -33,104 +33,104 @@ PlayerCharacter::~PlayerCharacter()
 
 void PlayerCharacter::update(float deltaTime)
 {
-	if (!canThrow)
-		playerState.throwing = true;
-	if (!canJump)
-		playerState.jumping = true;
-	if (!canAttack)
-		playerState.attacking = true;
-	if (!canWalkAttack)
-		playerState.walkAttack = true;
+	if (!m_canThrow)
+		m_playerState.throwing = true;
+	if (!m_canJump)
+		m_playerState.jumping = true;
+	if (!m_canAttack)
+		m_playerState.attacking = true;
+	if (!m_canWalkAttack)
+		m_playerState.walkAttack = true;
 	
-	velocity.y += WorldInstance::getInstance().getGravity() * deltaTime; //adding gravity to go down
+	m_velocity.y += WorldInstance::getInstance().getGravity() * deltaTime; //adding gravity to go down
 
-	if (abs(velocity.x) > maxSpeed)
+	if (abs(m_velocity.x) > m_maxSpeed)
 	{
-		if (!playerState.running)
+		if (!m_playerState.running)
 		{
-			velocity.x = maxSpeed * (velocity.x / abs(velocity.x));
+			m_velocity.x = m_maxSpeed * (m_velocity.x / abs(m_velocity.x));
 		}
 		else
 		{
-			velocity.x = abs(velocity.x) > 2.0f * maxSpeed ? 2.0f * maxSpeed * (velocity.x / abs(velocity.x)) : velocity.x;
+			m_velocity.x = abs(m_velocity.x) > 2.0f * m_maxSpeed ? 2.0f * m_maxSpeed * (m_velocity.x / abs(m_velocity.x)) : m_velocity.x;
 		}
 	}
-	if (sprite.getPosition().y >
+	if (m_sprite.getPosition().y >
 		(Renderer::getInstance().getView().getCenter().y + Renderer::getInstance().getView().getSize().y / 2.0f))
 	{
 		//stop moving when player falls through the ground
-		velocity.x = 0.0f;
+		m_velocity.x = 0.0f;
 	}
 
 	setCurrentAnimationInfo();
-	animation.update(deltaTime);
+	m_animation.update(deltaTime);
 	
-	move(velocity * deltaTime);
+	move(m_velocity * deltaTime);
 
-	WorldInstance::getInstance().setWorldSpeed(velocity.x);
+	WorldInstance::getInstance().setWorldSpeed(m_velocity.x);
 }
 
 void PlayerCharacter::render()
 {
-	Renderer::getInstance().getWindow().draw(sprite);
+	Renderer::getInstance().getWindow().draw(m_sprite);
 }
 
 void PlayerCharacter::onCollision(CollisionObject & other)
 {
 	if (dynamic_cast<Projectile*>(&other))
 	{
-		playerState.hurt = true;
+		m_playerState.hurt = true;
 	}
 	else if (dynamic_cast<Enemy*>(&other))
 	{
 		if (!(dynamic_cast<Enemy*>(&other)->isDead()))
 		{
-			playerState.hurt = true;
+			m_playerState.hurt = true;
 		}
 	}
 	else if(other.isMovable())
 	{
-		if (intersectionRect.width < 0.0f || intersectionRect.width > 0.0f)
+		if (m_intersectionRect.width < 0.0f || m_intersectionRect.width > 0.0f)
 		{
 			//collision on the left || right
-			playerState.pushing = true;
+			m_playerState.pushing = true;
 		}
-		if (intersectionRect.height < 0.0f)
+		if (m_intersectionRect.height < 0.0f)
 		{
 			//collision on the bottom
-			move(0.0f, intersectionRect.height);
-			velocity.y = 0.0f;
-			canJump = true;
-			playerState.jumping = false;
+			move(0.0f, m_intersectionRect.height);
+			m_velocity.y = 0.0f;
+			m_canJump = true;
+			m_playerState.jumping = false;
 		}
-		else if (intersectionRect.height > 0.0f)
+		else if (m_intersectionRect.height > 0.0f)
 		{
 			//collision on the top
-			move(0.0f, intersectionRect.height);
-			velocity.y = 0.0f;
+			move(0.0f, m_intersectionRect.height);
+			m_velocity.y = 0.0f;
 		}
 	}
 	else
 	{
-		if (intersectionRect.width < 0.0f || intersectionRect.width > 0.0f)
+		if (m_intersectionRect.width < 0.0f || m_intersectionRect.width > 0.0f)
 		{
 			//collision on the left || right
-			move(intersectionRect.width, 0.0f);
-			velocity.x = 0.0f;
+			move(m_intersectionRect.width, 0.0f);
+			m_velocity.x = 0.0f;
 		}
-		if (intersectionRect.height < 0.0f)
+		if (m_intersectionRect.height < 0.0f)
 		{
 			//collision on the bottom
-			move(0.0f, intersectionRect.height);
-			velocity.y = 0.0f;
-			canJump = true;
-			playerState.jumping = false;
+			move(0.0f, m_intersectionRect.height);
+			m_velocity.y = 0.0f;
+			m_canJump = true;
+			m_playerState.jumping = false;
 		}
-		else if (intersectionRect.height > 0.0f)
+		else if (m_intersectionRect.height > 0.0f)
 		{
 			//collision on the top
-			move(0.0f, intersectionRect.height);
-			velocity.y = 0.0f;
+			move(0.0f, m_intersectionRect.height);
+			m_velocity.y = 0.0f;
 		}
 	}
 }
@@ -139,7 +139,7 @@ void PlayerCharacter::onCollisionEnd(CollisionObject & other)
 {
 	if (other.isMovable())
 	{
-		playerState.pushing = false;
+		m_playerState.pushing = false;
 	}
 	else
 	{
@@ -188,157 +188,157 @@ void PlayerCharacter::removeInputHandlerFunctions()
 
 void PlayerCharacter::setCurrentAnimationInfo()
 {
-	if (playerState.hurt)
+	if (m_playerState.hurt)
 	{
-		if (animation.currentImage >= 3)
+		if (m_animation.m_currentImage >= 3)
 		{
-			playerState.hurt = false;
-			animation.currentImage = 0;
+			m_playerState.hurt = false;
+			m_animation.m_currentImage = 0;
 		}
 		else
 		{
-			animation.setCurrentAnimationAs("hurt");
-			velocity.x = 0.0f;
+			m_animation.setCurrentAnimationAs("hurt");
+			m_velocity.x = 0.0f;
 		}
 	}
-	else if (playerState.attacking)
+	else if (m_playerState.attacking)
 	{
-		if (animation.currentImage >= 5)
+		if (m_animation.m_currentImage >= 5)
 		{
-			playerState.attacking = false;
-			canAttack = true;
-			animation.currentImage = 0;
+			m_playerState.attacking = false;
+			m_canAttack = true;
+			m_animation.m_currentImage = 0;
 		}
 		else
 		{
-			animation.setCurrentAnimationAs("attacking");
-			velocity.x = 0.0f;
+			m_animation.setCurrentAnimationAs("attacking");
+			m_velocity.x = 0.0f;
 		}
 	}
-	else if (playerState.throwing)
+	else if (m_playerState.throwing)
 	{
-		if (animation.currentImage >= 3)
+		if (m_animation.m_currentImage >= 3)
 		{
-			playerState.throwing = false;
-			canThrow = true;
-			animation.currentImage = 0;
+			m_playerState.throwing = false;
+			m_canThrow = true;
+			m_animation.m_currentImage = 0;
 		}
 		else
 		{
-			animation.setCurrentAnimationAs("throwing");
-			velocity.x = 0.0f;
+			m_animation.setCurrentAnimationAs("throwing");
+			m_velocity.x = 0.0f;
 		}
 	}
-	else if (playerState.jumping)
+	else if (m_playerState.jumping)
 	{
-		animation.setCurrentAnimationAs("jumping");
+		m_animation.setCurrentAnimationAs("jumping");
 	}
-	else if (playerState.pushing)
+	else if (m_playerState.pushing)
 	{
-		animation.setCurrentAnimationAs("pushing");
+		m_animation.setCurrentAnimationAs("pushing");
 	}
-	else if (playerState.running)
+	else if (m_playerState.running)
 	{
-		animation.setCurrentAnimationAs("running");
+		m_animation.setCurrentAnimationAs("running");
 	}
-	else if (playerState.walkAttack)
+	else if (m_playerState.walkAttack)
 	{
-		if (animation.currentImage >= 3)
+		if (m_animation.m_currentImage >= 3)
 		{
-			playerState.walkAttack = false;
-			canWalkAttack = true;
+			m_playerState.walkAttack = false;
+			m_canWalkAttack = true;
 		}
 		else
 		{
-			animation.setCurrentAnimationAs("walkAttack");
+			m_animation.setCurrentAnimationAs("walkAttack");
 		}
 	}
-	else if (playerState.walking)
+	else if (m_playerState.walking)
 	{
-		animation.setCurrentAnimationAs("walking");
+		m_animation.setCurrentAnimationAs("walking");
 	}
 	else
 	{
-		animation.setCurrentAnimationAs("idle");
+		m_animation.setCurrentAnimationAs("idle");
 	}
 }
 
 void PlayerCharacter::throwRock()
 {
-	sf::Vector2f position = sprite.getPosition();
-	position.x += animation.isAnimationFacingRight() ? body.width : 0.0f;
-	position.y += body.height / 3.0f;
-	Projectile* rock = new Projectile("Heroes/Rock.png", getRenderDepth(), velocity.x, position, animation.isAnimationFacingRight());
+	sf::Vector2f position = m_sprite.getPosition();
+	position.x += m_animation.isAnimationFacingRight() ? m_body.width : 0.0f;
+	position.y += m_body.height / 3.0f;
+	Projectile* rock = new Projectile("Heroes/Rock.png", getRenderDepth(), m_velocity.x, position, m_animation.isAnimationFacingRight());
 }
 
 void PlayerCharacter::handleLeftMouseButtonClick(float deltaTime)
 {
-	if (canThrow)
+	if (m_canThrow)
 	{
-		playerState.throwing = true;
-		canThrow = false;
+		m_playerState.throwing = true;
+		m_canThrow = false;
 		throwRock();
 	}
 }
 
 void PlayerCharacter::handleRightMouseButtonClick(float deltaTime)
 {
-	if (playerState.walking && canWalkAttack && !playerState.running)
+	if (m_playerState.walking && m_canWalkAttack && !m_playerState.running)
 	{
-		playerState.walkAttack = true;
-		canWalkAttack = false;
+		m_playerState.walkAttack = true;
+		m_canWalkAttack = false;
 	}
-	else if (canAttack && !playerState.running && !playerState.walking)
+	else if (m_canAttack && !m_playerState.running && !m_playerState.walking)
 	{
-		playerState.attacking = true;
-		canAttack = false;
+		m_playerState.attacking = true;
+		m_canAttack = false;
 	}
 }
 
 void PlayerCharacter::handleAKeyboardButtonPressed(float deltaTime)
 {
-	if (!movingRight)
+	if (!m_movingRight)
 	{
-		playerState.walking = true;
-		velocity.x -= (acceleration * speedMultiplier);
-		animation.setAnimationFaceRight(false);
-		movingLeft = true;
+		m_playerState.walking = true;
+		m_velocity.x -= (m_acceleration * m_speedMultiplier);
+		m_animation.setAnimationFaceRight(false);
+		m_movingLeft = true;
 	}
 }
 
 void PlayerCharacter::handleDKeyboardButtonPressed(float deltaTime)
 {
-	if (!movingLeft)
+	if (!m_movingLeft)
 	{
-		playerState.walking = true;
-		velocity.x += (acceleration * speedMultiplier);
-		animation.setAnimationFaceRight(true);
-		movingRight = true;
+		m_playerState.walking = true;
+		m_velocity.x += (m_acceleration * m_speedMultiplier);
+		m_animation.setAnimationFaceRight(true);
+		m_movingRight = true;
 	}
 }
 
 void PlayerCharacter::handleSpaceKeyboardButtonPressed(float deltaTime)
 {
-	if (canJump)
+	if (m_canJump)
 	{
-		playerState.jumping = true;
-		canJump = false;
+		m_playerState.jumping = true;
+		m_canJump = false;
 		//square root( 2.0f * gravity * jumpHeight)
-		velocity.y = -sqrtf(2.0f * 981.0f * jumpHeight);
+		m_velocity.y = -sqrtf(2.0f * 981.0f * m_jumpHeight);
 	}
 }
 
 void PlayerCharacter::handleLShiftKeyboardButtonPressed(float deltaTime)
 {
-	if (playerState.walking && canJump && !playerState.pushing)
+	if (m_playerState.walking && m_canJump && !m_playerState.pushing)
 	{
-		speedMultiplier = 2.0f;
-		playerState.running = true;
+		m_speedMultiplier = 2.0f;
+		m_playerState.running = true;
 	}
-	else if (playerState.pushing)
+	else if (m_playerState.pushing)
 	{
-		speedMultiplier = 1.0f;
-		playerState.running = false;
+		m_speedMultiplier = 1.0f;
+		m_playerState.running = false;
 	}
 }
 
@@ -353,19 +353,19 @@ void PlayerCharacter::handleRightMouseButtonReleased(float deltaTime)
 
 void PlayerCharacter::handleAKeyboardButtonReleased(float deltaTime)
 {
-	velocity.x = 0.0f; //insta stop moving when key isnt pressed
+	m_velocity.x = 0.0f; //insta stop moving when key isnt pressed
 	//velocity.x *= 0.0f; //slowly stop moving (higher number=slower stop time, lower number=faster stop time)
-	playerState.walking = false;
-	playerState.running = false;
-	movingLeft = false;
+	m_playerState.walking = false;
+	m_playerState.running = false;
+	m_movingLeft = false;
 }
 
 void PlayerCharacter::handleDKeyboardButtonReleased(float deltaTime)
 {
-	velocity.x = 0.0f;
-	playerState.walking = false;
-	playerState.running = false;
-	movingRight = false;
+	m_velocity.x = 0.0f;
+	m_playerState.walking = false;
+	m_playerState.running = false;
+	m_movingRight = false;
 }
 
 void PlayerCharacter::handleSpaceKeyboardButtonReleased(float deltaTime)
@@ -375,6 +375,6 @@ void PlayerCharacter::handleSpaceKeyboardButtonReleased(float deltaTime)
 
 void PlayerCharacter::handleLShiftKeyboardButtonReleased(float deltaTime)
 {
-	speedMultiplier = 1.0f;
-	playerState.running = false;
+	m_speedMultiplier = 1.0f;
+	m_playerState.running = false;
 }

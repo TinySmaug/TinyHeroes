@@ -6,14 +6,14 @@
 
 BackgroundElement::BackgroundElement(std::string file)
 {
-	layerTexture.loadFromFile(file);
+	m_layerTexture.loadFromFile(file);
 
-	sf::Vector2u bgTextureSize = layerTexture.getSize();
+	sf::Vector2u bgTextureSize = m_layerTexture.getSize();
 	sf::Vector2f bgTextureScale(static_cast<float>(Renderer::getInstance().getView().getSize().x) / bgTextureSize.x,
 		static_cast<float>(Renderer::getInstance().getView().getSize().y) / bgTextureSize.y);
 
-	backgroundLayer.setTexture(layerTexture);
-	backgroundLayer.scale(bgTextureScale);
+	m_backgroundLayer.setTexture(m_layerTexture);
+	m_backgroundLayer.scale(bgTextureScale);
 }
 
 BackgroundElement::~BackgroundElement()
@@ -29,27 +29,27 @@ void BackgroundElement::render()
 	sf::FloatRect body;
 	float viewSizeX = Renderer::getInstance().getView().getSize().x;
 	//center layer
-	Renderer::getInstance().getWindow().draw(backgroundLayer);
+	Renderer::getInstance().getWindow().draw(m_backgroundLayer);
 	//left layer
-	backgroundLayer.move(-viewSizeX, 0.0f);
-	body.left = backgroundLayer.getPosition().x;
+	m_backgroundLayer.move(-viewSizeX, 0.0f);
+	body.left = m_backgroundLayer.getPosition().x;
 	if (!(body.left + viewSizeX < leftViewBound))
 	{
-		Renderer::getInstance().getWindow().draw(backgroundLayer);
+		Renderer::getInstance().getWindow().draw(m_backgroundLayer);
 	}
 	//right layer
-	backgroundLayer.move(2.0f*viewSizeX, 0.0f);
-	body.left = backgroundLayer.getPosition().x;
+	m_backgroundLayer.move(2.0f*viewSizeX, 0.0f);
+	body.left = m_backgroundLayer.getPosition().x;
 	if (!(body.left > rightViewBound))
 	{
-		Renderer::getInstance().getWindow().draw(backgroundLayer);
+		Renderer::getInstance().getWindow().draw(m_backgroundLayer);
 	}
-	backgroundLayer.move(-viewSizeX, 0.0f);
+	m_backgroundLayer.move(-viewSizeX, 0.0f);
 }
 
 void BackgroundElement::update(float velocity, float deltaTime)
 {
-	backgroundLayer.move(velocity * deltaTime, 0.0f);
+	m_backgroundLayer.move(velocity * deltaTime, 0.0f);
 	checkBounds(velocity, deltaTime);
 }
 
@@ -62,12 +62,12 @@ void BackgroundElement::checkBounds(float velocity, float deltaTime)
 	float leftBound = viewCenterX - Renderer::getInstance().getView().getSize().x / 2.0f;
 	float rightBound = viewCenterX + Renderer::getInstance().getView().getSize().x / 2.0f;
 
-	if (backgroundLayer.getPosition().x > rightBound)
+	if (m_backgroundLayer.getPosition().x > rightBound)
 	{
-		backgroundLayer.move(-viewSizeX, 0.0f);
+		m_backgroundLayer.move(-viewSizeX, 0.0f);
 	}
-	if (backgroundLayer.getPosition().x + viewSizeX < leftBound)
+	if (m_backgroundLayer.getPosition().x + viewSizeX < leftBound)
 	{
-		backgroundLayer.move(viewSizeX, 0.0f);
+		m_backgroundLayer.move(viewSizeX, 0.0f);
 	}
 }

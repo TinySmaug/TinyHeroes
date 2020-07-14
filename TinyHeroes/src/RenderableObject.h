@@ -9,15 +9,15 @@ public:
 
 	virtual void render() = 0;
 	virtual sf::FloatRect getRenderableArea() = 0;
-	int getRenderDepth() const { return renderDepth; };
-	void setHidden(bool hidden) { this->hidden = hidden; };
-	bool isHidden() { return hidden; };
+	int getRenderDepth() const { return m_renderDepth; };
+	void setHidden(bool hidden) { this->m_hidden = hidden; };
+	bool isHidden() { return m_hidden; };
 
 protected:
 	void setRenderDepth(int depth);
 
 protected:
-	int renderDepth;
-	bool hidden = false;
+	int m_renderDepth;
+	bool m_hidden = false;
 };
 

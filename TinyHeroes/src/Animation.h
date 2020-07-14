@@ -19,26 +19,26 @@ public:
 
 	void update(float deltaTime);
 	void setAnimations(std::string txtFilePath);
-	void setSprite(sf::Sprite& sprite) { this->sprite = &sprite; };
+	void setSprite(sf::Sprite& sprite) { this->m_sprite = &sprite; };
 
 	void setCurrentAnimationAs(std::string animationName);
 	void setAnimationFaceRight(bool right);
-	bool isAnimationFacingRight() { return faceRight; };
+	bool isAnimationFacingRight() { return m_faceRight; };
 
 public:
-	unsigned int currentImage;
-	std::vector<animationInfo> animations;
+	unsigned int m_currentImage;
+	std::vector<animationInfo> m_animations;
 
 private:
 	animationInfo& currentAnimation();
 
 private:
-	bool faceRight = true;
-	bool previousFaceRight = true;
-	float currentFrameTime;
-	std::string currentAnimationName;
-	std::string previousAnimationName;
-	std::ifstream animationsFile;
-	sf::Sprite* sprite;
+	bool m_faceRight = true;
+	bool m_previousFaceRight = true;
+	float m_currentFrameTime;
+	std::string m_currentAnimationName;
+	std::string m_previousAnimationName;
+	std::ifstream m_animationsFile;
+	sf::Sprite* m_sprite;
 };
 

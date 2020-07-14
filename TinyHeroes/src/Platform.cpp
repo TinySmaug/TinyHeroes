@@ -4,7 +4,7 @@
 Platform::Platform(std::string texturePath, int depth)
 	: Entity(texturePath, depth)
 {
-	movable = false;
+	m_movable = false;
 }
 
 
@@ -14,7 +14,7 @@ Platform::~Platform()
 
 void Platform::render()
 {
-	Renderer::getInstance().getWindow().draw(sprite);
+	Renderer::getInstance().getWindow().draw(m_sprite);
 }
 
 void Platform::onCollision(CollisionObject & other)
@@ -32,7 +32,7 @@ void Platform::update(float deltaTime)
 void Platform::setSize(int width, int height)
 {
 	sf::IntRect platformRect(0, 0, width, height);
-	sprite.setTextureRect(platformRect);
-	body.width = width;
-	body.height = height;
+	m_sprite.setTextureRect(platformRect);
+	m_body.width = width;
+	m_body.height = height;
 }

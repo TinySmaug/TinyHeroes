@@ -11,13 +11,13 @@ public:
 	virtual void onCollisionEnd(CollisionObject & other) = 0;
 
 	bool checkCollision(CollisionObject& other);
-	bool isMovable() { return movable; };
+	bool isMovable() { return m_movable; };
 
 protected:
-	sf::FloatRect intersectionRect;
-	bool movable;
+	sf::FloatRect m_intersectionRect;
+	bool m_movable;
 
 private:
-	sf::FloatRect& body;
+	sf::FloatRect& m_body;
 };
 

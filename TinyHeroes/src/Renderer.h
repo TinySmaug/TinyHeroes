@@ -12,7 +12,7 @@ public:
 	sf::RenderWindow& getWindow() const;
 	sf::View& getView() const;
 
-	std::vector<RenderableObject*>& getRenderableObjects() { return renderableObjects; };
+	std::vector<RenderableObject*>& getRenderableObjects() { return m_renderableObjects; };
 	void addRenderableObject(RenderableObject* object);
 	std::vector<RenderableObject*>::iterator removeRenderableObject(std::vector<RenderableObject*>::iterator i);
 
@@ -25,8 +25,8 @@ private:
 	bool outOfView(RenderableObject& object) const;
 
 private:
-	std::vector<RenderableObject*> renderableObjects;
-	sf::RenderWindow* window;
-	sf::View* view;
+	std::vector<RenderableObject*> m_renderableObjects;
+	sf::RenderWindow* m_window;
+	sf::View* m_view;
 };
 

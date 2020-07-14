@@ -6,16 +6,16 @@
 
 Renderer::Renderer() 
 {
-	window = new sf::RenderWindow(sf::VideoMode(1280, 600), "Tiny Heroes", sf::Style::Close | sf::Style::Resize);
-	view = new sf::View(sf::Vector2f(window->getSize().x/2.0f, window->getSize().y / 2.0f), sf::Vector2f(window->getSize()));
-	view->setViewport(sf::FloatRect(0.0f, 0.0f, 1.0f, 1.0f));
-	window->setView(getView());
+	m_window = new sf::RenderWindow(sf::VideoMode(1280, 600), "Tiny Heroes", sf::Style::Close | sf::Style::Resize);
+	m_view = new sf::View(sf::Vector2f(m_window->getSize().x/2.0f, m_window->getSize().y / 2.0f), sf::Vector2f(m_window->getSize()));
+	m_view->setViewport(sf::FloatRect(0.0f, 0.0f, 1.0f, 1.0f));
+	m_window->setView(getView());
 }
 
 Renderer::~Renderer()
 {
-	delete window;
-	delete view;
+	delete m_window;
+	delete m_view;
 }
 
 Renderer& Renderer::getInstance()
@@ -26,33 +26,33 @@ Renderer& Renderer::getInstance()
 
 sf::RenderWindow & Renderer::getWindow() const
 {
-	return *window;
+	return *m_window;
 }
 
 sf::View & Renderer::getView() const
 {
-	return *view;
+	return *m_view;
 }
 
 void Renderer::addRenderableObject(RenderableObject * object)
 {
-	renderableObjects.emplace_back(object);
-	std::stable_sort(renderableObjects.begin(), renderableObjects.end(),
+	m_renderableObjects.emplace_back(object);
+	std::stable_sort(m_renderableObjects.begin(), m_renderableObjects.end(),
 		[](auto objA, auto objB) { return objA->getRenderDepth() < objB->getRenderDepth(); });
 }
 
 std::vector<RenderableObject*>::iterator Renderer::removeRenderableObject(std::vector<RenderableObject*>::iterator i)
 {
-	return renderableObjects.erase(i);
+	return m_renderableObjects.erase(i);
 }
 
 bool Renderer::outOfView(RenderableObject & object) const
 {
 	//Unseen objects shouldn't be rendered
-	float leftViewBound = view->getCenter().x - view->getSize().x / 2.0f;
-	float rightViewBound = view->getCenter().x + view->getSize().x / 2.0f;
-	float topViewBound = view->getCenter().y - view->getSize().y / 2.0f;
-	float bottomViewBound = view->getCenter().y + view->getSize().y / 2.0f;
+	float leftViewBound = m_view->getCenter().x - m_view->getSize().x / 2.0f;
+	float rightViewBound = m_view->getCenter().x + m_view->getSize().x / 2.0f;
+	float topViewBound = m_view->getCenter().y - m_view->getSize().y / 2.0f;
+	float bottomViewBound = m_view->getCenter().y + m_view->getSize().y / 2.0f;
 
 	sf::FloatRect body = object.getRenderableArea();
 	if (body.top > bottomViewBound || body.top + body.height < topViewBound ||
@@ -65,7 +65,7 @@ bool Renderer::outOfView(RenderableObject & object) const
 
 void Renderer::renderObjects()
 {
-	for (auto i = renderableObjects.begin(); i != renderableObjects.end(); ++i)
+	for (auto i = m_renderableObjects.begin(); i != m_renderableObjects.end(); ++i)
 	{
 		if (!outOfView(*(*i)) && !((*i)->isHidden()))
 		{

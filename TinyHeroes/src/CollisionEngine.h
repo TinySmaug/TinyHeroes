@@ -10,7 +10,7 @@ public:
 	void checkCollisions();
 	static CollisionEngine& getInstance();
 
-	std::vector<CollisionObject*>& getCollisionObjects() { return collisionObjects; };
+	std::vector<CollisionObject*>& getCollisionObjects() { return m_collisionObjects; };
 	void addCollisionObject(CollisionObject* object);
 	void removeCollisionObject(unsigned objectID);
 
@@ -26,10 +26,10 @@ private:
 	bool areCollidedObjects(CollisionObject* first, CollisionObject* second);
 
 private:
-	std::vector<CollisionObject*> collisionObjects;
-	std::vector<CollisionObject*> objectsToCollide;
-	std::vector<unsigned> objectsToRemove;
+	std::vector<CollisionObject*> m_collisionObjects;
+	std::vector<CollisionObject*> m_objectsToCollide;
+	std::vector<unsigned> m_objectsToRemove;
 
-	std::vector<std::pair<CollisionObject*, CollisionObject*>> collidedObjects;
+	std::vector<std::pair<CollisionObject*, CollisionObject*>> m_collidedObjects;
 };
 

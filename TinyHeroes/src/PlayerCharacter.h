@@ -16,7 +16,7 @@ public:
 	void addInputHandlerFunctions();
 	void removeInputHandlerFunctions();
 
-	sf::Vector2f getVelocity() const { return velocity; };
+	sf::Vector2f getVelocity() const { return m_velocity; };
 
 private:
 	void setCurrentAnimationInfo();
@@ -47,17 +47,17 @@ private:
 		bool walking;
 		bool hurt;
 	} state;
-	state playerState;
-	sf::Vector2f velocity;
-	float speedMultiplier;
-	float acceleration;
-	float maxSpeed;
-	bool canThrow;
-	bool canJump;
-	bool canAttack;
-	bool canWalkAttack;
-	float jumpHeight;
-	bool movingLeft;
-	bool movingRight;
+	state m_playerState;
+	sf::Vector2f m_velocity;
+	float m_speedMultiplier;
+	float m_acceleration;
+	float m_maxSpeed;
+	bool m_canThrow;
+	bool m_canJump;
+	bool m_canAttack;
+	bool m_canWalkAttack;
+	float m_jumpHeight;
+	bool m_movingLeft;
+	bool m_movingRight;
 };
 

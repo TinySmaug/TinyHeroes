@@ -5,8 +5,8 @@
 
 WorldInstance::WorldInstance()
 {
-	worldSpeed = 0.0f;
-	gravity = 981.0f;
+	m_worldSpeed = 0.0f;
+	m_gravity = 981.0f;
 }
 
 WorldInstance::~WorldInstance()
@@ -24,50 +24,50 @@ void WorldInstance::updateObjects(float deltaTime)
 {
 	updateAliveObjectsVector();
 
-	for (auto i = aliveObjects.begin(); i != aliveObjects.end(); i++)
+	for (auto i = m_aliveObjects.begin(); i != m_aliveObjects.end(); i++)
 	{
 		(*i)->update(deltaTime);
 		if (dynamic_cast<PlayerCharacter*>(*i))
 		{
 			auto player = dynamic_cast<PlayerCharacter*>(*i);
-			playerPosition = player->getPosition();
+			m_playerPosition = player->getPosition();
 		}
 	}
-	if(background != nullptr)
-		background->update(deltaTime);
+	if(m_background != nullptr)
+		m_background->update(deltaTime);
 
 }
 
 void WorldInstance::updateAliveObjectsVector()
 {
-	for (auto i : objectsToSpawn)
+	for (auto i : m_objectsToSpawn)
 	{
-		aliveObjects.emplace_back(i);
+		m_aliveObjects.emplace_back(i);
 	}
-	for (auto i : objectsToRemove)
+	for (auto i : m_objectsToRemove)
 	{
-		auto findResult = std::find_if(aliveObjects.begin(), aliveObjects.end(), [i](Entity* entity) { return entity->getID() == i; });
+		auto findResult = std::find_if(m_aliveObjects.begin(), m_aliveObjects.end(), [i](Entity* entity) { return entity->getID() == i; });
 
-		if (findResult != aliveObjects.end())
+		if (findResult != m_aliveObjects.end())
 		{
-			aliveObjects.erase(findResult);
+			m_aliveObjects.erase(findResult);
 		}
 	}
-	objectsToSpawn.clear();
-	objectsToRemove.clear();
+	m_objectsToSpawn.clear();
+	m_objectsToRemove.clear();
 }
 
 void WorldInstance::addAliveObject(Entity * object)
 {
-	objectsToSpawn.emplace_back(object);
+	m_objectsToSpawn.emplace_back(object);
 }
 
 void WorldInstance::addAliveObject(Background * object)
 {
-	background = object;
+	m_background = object;
 }
 
 void WorldInstance::removeAliveObject(unsigned entityID)
 {
-	return objectsToRemove.emplace_back(entityID);
+	return m_objectsToRemove.emplace_back(entityID);
 }

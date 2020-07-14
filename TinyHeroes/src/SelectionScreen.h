@@ -12,7 +12,7 @@ public:
 	void render();
 	
 	void removeInputHandlerFunctions();
-	std::string getChosenHeroFilePath() { return chosenHeroFilePath; };
+	std::string getChosenHeroFilePath() { return m_chosenHeroFilePath; };
 
 	void destroyIcons();
 
@@ -30,20 +30,20 @@ private:
 	void makeBackgroundsVisibleToClickDetection();
 
 private:
-	SelectIcon* PinkMonster;
-	SelectIcon* OwletMonster;
-	SelectIcon* DudeMonster;
-	std::string chosenHeroFilePath;
+	SelectIcon* m_pinkMonster;
+	SelectIcon* m_owletMonster;
+	SelectIcon* m_dudeMonster;
+	std::string m_chosenHeroFilePath;
 
-	SelectIcon* Forest;
-	SelectIcon* Mountain;
-	SelectIcon* Desert;
-	SelectIcon* Waterfall;
+	SelectIcon* m_forest;
+	SelectIcon* m_mountain;
+	SelectIcon* m_desert;
+	SelectIcon* m_waterfall;
 
-	sf::Sprite background;
-	sf::Texture backgroundTexture;
-	sf::Font font;
-	sf::Text chooseHeroText;
-	sf::Text chooseBackgroundText;
+	sf::Sprite m_background;
+	sf::Texture m_backgroundTexture;
+	sf::Font m_font;
+	sf::Text m_chooseHeroText;
+	sf::Text m_chooseBackgroundText;
 };
 

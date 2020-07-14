@@ -10,7 +10,7 @@ Background::Background(std::string file, int layerNum, int renderDepth)
 		std::string path = file;
 		path.append("/").append(std::to_string(i)).append(".png");
 
-		background.push_back(new BackgroundElement(path));
+		m_background.push_back(new BackgroundElement(path));
 	}
 
 	Renderer::getInstance().addRenderableObject(this);
@@ -20,13 +20,13 @@ Background::Background(std::string file, int layerNum, int renderDepth)
 
 Background::~Background()
 {
-	for (auto i : background)
+	for (auto i : m_background)
 		delete i;
 }
 
 void Background::render()
 {
-	for (auto layer : background)
+	for (auto layer : m_background)
 	{
 		layer->render();
 	}
@@ -48,9 +48,9 @@ void Background::update(float deltaTime)
 	float layerMultiplier = 0.5f;
 	float velocity = WorldInstance::getInstance().getWorldSpeed() / 2.5f;
 
-	for (int i = background.size() - 1; i >= 0; i--)
+	for (int i = m_background.size() - 1; i >= 0; i--)
 	{
-		background[i]->update(velocity, deltaTime);
+		m_background[i]->update(velocity, deltaTime);
 		velocity *= layerMultiplier;
 	}
 }

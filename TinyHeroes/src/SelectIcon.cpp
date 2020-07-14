@@ -5,11 +5,11 @@
 SelectIcon::SelectIcon(std::string file)
 	:RenderableObject(1)
 {
-	texture.loadFromFile(file);
-	icon.setTexture(texture);
+	m_texture.loadFromFile(file);
+	m_icon.setTexture(m_texture);
 
-	body.width = static_cast<float>(texture.getSize().x);
-	body.height = static_cast<float>(texture.getSize().y);
+	m_body.width = static_cast<float>(m_texture.getSize().x);
+	m_body.height = static_cast<float>(m_texture.getSize().y);
 }
 
 SelectIcon::~SelectIcon()
@@ -18,22 +18,22 @@ SelectIcon::~SelectIcon()
 
 void SelectIcon::render()
 {
-	if (!hidden)
+	if (!m_hidden)
 	{
-		Renderer::getInstance().getWindow().draw(icon);
+		Renderer::getInstance().getWindow().draw(m_icon);
 	}
 }
 
 void SelectIcon::setPosition(float xPos, float yPos)
 {
-	icon.setPosition(xPos, yPos);
-	body.left = icon.getPosition().x;
-	body.top = icon.getPosition().y;
+	m_icon.setPosition(xPos, yPos);
+	m_body.left = m_icon.getPosition().x;
+	m_body.top = m_icon.getPosition().y;
 }
 
 void SelectIcon::setScale(float xScale, float yScale)
 {
-	icon.setScale(xScale, yScale);
-	body.width *= xScale;
-	body.height *= yScale;
+	m_icon.setScale(xScale, yScale);
+	m_body.width *= xScale;
+	m_body.height *= yScale;
 }

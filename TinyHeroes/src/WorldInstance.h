@@ -11,14 +11,14 @@ public:
 	static WorldInstance& getInstance();
 	void updateObjects(float deltaTime);
 
-	std::vector<Entity*>& getAliveObjects() { return aliveObjects; };
+	std::vector<Entity*>& getAliveObjects() { return m_aliveObjects; };
 	void addAliveObject(Entity* object);
     void addAliveObject(Background* object);
 	void removeAliveObject(unsigned entityID);
-	void setWorldSpeed(float speed) { worldSpeed = speed; };
-	float getWorldSpeed() { return worldSpeed; };
-	float getGravity() { return gravity; };
-	sf::Vector2f getPlayerPosition() { return playerPosition; };
+	void setWorldSpeed(float speed) { m_worldSpeed = speed; };
+	float getWorldSpeed() { return m_worldSpeed; };
+	float getGravity() { return m_gravity; };
+	sf::Vector2f getPlayerPosition() { return m_playerPosition; };
 
 private:
 	WorldInstance();
@@ -29,12 +29,12 @@ private:
 	void updateAliveObjectsVector();
 
 private:
-    std::vector<Entity*> aliveObjects;
-    std::vector<Entity*> objectsToSpawn;
-    std::vector<unsigned> objectsToRemove;
-	Background* background;
-	float worldSpeed;
-	float gravity;
-	sf::Vector2f playerPosition;
+    std::vector<Entity*> m_aliveObjects;
+    std::vector<Entity*> m_objectsToSpawn;
+    std::vector<unsigned> m_objectsToRemove;
+	Background* m_background;
+	float m_worldSpeed;
+	float m_gravity;
+	sf::Vector2f m_playerPosition;
 };
 

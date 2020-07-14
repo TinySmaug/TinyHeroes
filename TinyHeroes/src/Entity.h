@@ -14,24 +14,24 @@ public:
 
 	virtual void update(float deltaTime) = 0;
 	void setTexture(std::string texturePath);
-	sf::FloatRect getRenderableArea() { return body; };
+	sf::FloatRect getRenderableArea() { return m_body; };
 	void destroy() const;
 	void setScale(sf::Vector2f scale);
 	void move(sf::Vector2f offset);
 	void move(float offsetX, float offsetY);
-	unsigned getID() { return id; }
+	unsigned getID() { return m_id; }
 	void setPosition(sf::Vector2f position);
 	void setPosition(float posX, float posY);
-	sf::Vector2f getPosition() const { return sprite.getPosition(); }
-	sf::FloatRect getBody() const { return body; };
+	sf::Vector2f getPosition() const { return m_sprite.getPosition(); }
+	sf::FloatRect getBody() const { return m_body; };
 
 protected:
-	unsigned id = ID++;
-	sf::Sprite sprite;
-	sf::Texture texture;
-	sf::FloatRect body;
-	std::string filePath;
-	Animation animation;
+	unsigned m_id = ID++;
+	sf::Sprite m_sprite;
+	sf::Texture m_texture;
+	sf::FloatRect m_body;
+	std::string m_filePath;
+	Animation m_animation;
 
 private:
 	void setAnimations();

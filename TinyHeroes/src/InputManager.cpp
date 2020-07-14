@@ -19,7 +19,7 @@ InputManager& InputManager::getInstance()
 
 void InputManager::update(float deltaTime)
 {
-	for (auto i = keyboardInputHandlers.begin(); i != keyboardInputHandlers.end(); i++)
+	for (auto i = m_keyboardInputHandlers.begin(); i != m_keyboardInputHandlers.end(); i++)
 	{
 		if (sf::Keyboard::isKeyPressed((*i).first))
 		{
@@ -32,7 +32,7 @@ void InputManager::update(float deltaTime)
 			(*i).second.wasActiveInPreviousFrame = false;
 		}
 	}
-	for (auto i = mouseInputHandlers.begin(); i != mouseInputHandlers.end(); i++)
+	for (auto i = m_mouseInputHandlers.begin(); i != m_mouseInputHandlers.end(); i++)
 	{
 		if (sf::Mouse::isButtonPressed((*i).first))
 		{
@@ -49,7 +49,7 @@ void InputManager::update(float deltaTime)
 
 bool InputManager::addKeyboardInputHandler(sf::Keyboard::Key key, InputHandlerData data)
 {
-	bool result = keyboardInputHandlers.try_emplace(key, data).second;
+	bool result = m_keyboardInputHandlers.try_emplace(key, data).second;
 	if (DEBUG)
 	{
 		assert(result);
@@ -59,7 +59,7 @@ bool InputManager::addKeyboardInputHandler(sf::Keyboard::Key key, InputHandlerDa
 
 bool InputManager::addMouseInputHandler(sf::Mouse::Button button, InputHandlerData data)
 {
-	bool result = mouseInputHandlers.try_emplace(button, data).second;
+	bool result = m_mouseInputHandlers.try_emplace(button, data).second;
 	if (DEBUG)
 	{
 		assert(result);
@@ -69,10 +69,10 @@ bool InputManager::addMouseInputHandler(sf::Mouse::Button button, InputHandlerDa
 
 bool InputManager::removeKeyboardInputHandler(sf::Keyboard::Key key)
 {
-	auto position = keyboardInputHandlers.find(key);
-	if (position != keyboardInputHandlers.end())
+	auto position = m_keyboardInputHandlers.find(key);
+	if (position != m_keyboardInputHandlers.end())
 	{
-		keyboardInputHandlers.erase(position);
+		m_keyboardInputHandlers.erase(position);
 		return true;
 	}
 	return false;
@@ -80,10 +80,10 @@ bool InputManager::removeKeyboardInputHandler(sf::Keyboard::Key key)
 
 bool InputManager::removeMouseInputHandler(sf::Mouse::Button button)
 {
-	auto position = mouseInputHandlers.find(button);
-	if (position != mouseInputHandlers.end())
+	auto position = m_mouseInputHandlers.find(button);
+	if (position != m_mouseInputHandlers.end())
 	{
-		mouseInputHandlers.erase(position);
+		m_mouseInputHandlers.erase(position);
 		return true;
 	}
 	return false;

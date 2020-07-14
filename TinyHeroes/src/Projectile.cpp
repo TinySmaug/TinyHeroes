@@ -7,8 +7,8 @@ Projectile::Projectile(std::string texturePath, int depth, float kineticEnergy, 
 	: Entity(texturePath, depth)
 {
 	//NOTE: so that the spawned projectile doesn't collide with the entity that spawned it
-	faceRight ? sprite.setPosition(position) : sprite.setPosition(position.x - body.width, position.y);
-	sprite.setScale(sf::Vector2f(3.0f, 3.0f));
+	faceRight ? m_sprite.setPosition(position) : m_sprite.setPosition(position.x - m_body.width, position.y);
+	m_sprite.setScale(sf::Vector2f(3.0f, 3.0f));
 	m_flyUpwards = true;
 	m_maxHeight = 50.0f;
 	m_speed = 400.0f;
@@ -23,7 +23,7 @@ Projectile::~Projectile()
 
 void Projectile::render()
 {
-	Renderer::getInstance().getWindow().draw(sprite);
+	Renderer::getInstance().getWindow().draw(m_sprite);
 }
 
 void Projectile::update(float deltaTime)

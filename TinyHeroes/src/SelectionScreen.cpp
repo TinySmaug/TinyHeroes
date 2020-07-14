@@ -11,67 +11,67 @@ SelectionScreen::SelectionScreen()
 	heroSelectionComplete = false;
 	backgroundSelectionComplete = false;
 
-	backgroundTexture.loadFromFile("StartingScreen/StartingScreenBackground.png");
-	sf::Vector2u bgTextureSize = backgroundTexture.getSize();
+	m_backgroundTexture.loadFromFile("StartingScreen/StartingScreenBackground.png");
+	sf::Vector2u bgTextureSize = m_backgroundTexture.getSize();
 	sf::Vector2f bgTextureScale(static_cast<float>(Renderer::getInstance().getView().getSize().x) / bgTextureSize.x,
 		static_cast<float>(Renderer::getInstance().getView().getSize().y) / bgTextureSize.y);
-	background.setTexture(backgroundTexture);
-	background.setScale(bgTextureScale);
+	m_background.setTexture(m_backgroundTexture);
+	m_background.setScale(bgTextureScale);
 
-	font.loadFromFile("StartingScreen/Planes_ValMore.ttf");
+	m_font.loadFromFile("StartingScreen/Planes_ValMore.ttf");
 
 	//Hero Selection Screen
-	chooseHeroText.setFont(font);
-	chooseHeroText.setString("Choose your hero: ");
-	chooseHeroText.setCharacterSize(56);
-	chooseHeroText.setFillColor(sf::Color::White);
-	chooseHeroText.setOutlineColor(sf::Color::Black);
-	chooseHeroText.setOutlineThickness(3.0f);
-	chooseHeroText.setPosition(Renderer::getInstance().getView().getSize().x / 3.3f,
+	m_chooseHeroText.setFont(m_font);
+	m_chooseHeroText.setString("Choose your hero: ");
+	m_chooseHeroText.setCharacterSize(56);
+	m_chooseHeroText.setFillColor(sf::Color::White);
+	m_chooseHeroText.setOutlineColor(sf::Color::Black);
+	m_chooseHeroText.setOutlineThickness(3.0f);
+	m_chooseHeroText.setPosition(Renderer::getInstance().getView().getSize().x / 3.3f,
 		Renderer::getInstance().getView().getSize().y / 11.5f);
 
-	PinkMonster = new SelectIcon("StartingScreen/PinkMonsterPortrait.png");
-	PinkMonster->setPosition(Renderer::getInstance().getView().getSize().x / 4.0f,
+	m_pinkMonster = new SelectIcon("StartingScreen/PinkMonsterPortrait.png");
+	m_pinkMonster->setPosition(Renderer::getInstance().getView().getSize().x / 4.0f,
 		Renderer::getInstance().getView().getSize().y / 3.0f);
-	PinkMonster->setScale(3.5f, 3.5f);
-	OwletMonster = new SelectIcon("StartingScreen/OwletMonsterPortrait.png");
-	OwletMonster->setPosition(Renderer::getInstance().getView().getSize().x / 2.2f,
+	m_pinkMonster->setScale(3.5f, 3.5f);
+	m_owletMonster = new SelectIcon("StartingScreen/OwletMonsterPortrait.png");
+	m_owletMonster->setPosition(Renderer::getInstance().getView().getSize().x / 2.2f,
 		Renderer::getInstance().getView().getSize().y / 3.0f);
-	OwletMonster->setScale(3.5f, 3.5f);
-	DudeMonster = new SelectIcon("StartingScreen/DudeMonsterPortrait.png");
-	DudeMonster->setPosition(Renderer::getInstance().getView().getSize().x / 1.5f,
+	m_owletMonster->setScale(3.5f, 3.5f);
+	m_dudeMonster = new SelectIcon("StartingScreen/DudeMonsterPortrait.png");
+	m_dudeMonster->setPosition(Renderer::getInstance().getView().getSize().x / 1.5f,
 		Renderer::getInstance().getView().getSize().y / 3.0f);
-	DudeMonster->setScale(3.5f, 3.5f);
+	m_dudeMonster->setScale(3.5f, 3.5f);
 
 	//Background Selection Screen
-	chooseBackgroundText.setFont(font);
-	chooseBackgroundText.setString("Choose a background: ");
-	chooseBackgroundText.setCharacterSize(56);
-	chooseBackgroundText.setFillColor(sf::Color::White);
-	chooseBackgroundText.setOutlineColor(sf::Color::Black);
-	chooseBackgroundText.setOutlineThickness(3.0f);
-	chooseBackgroundText.setPosition(Renderer::getInstance().getView().getSize().x / 3.3f,
+	m_chooseBackgroundText.setFont(m_font);
+	m_chooseBackgroundText.setString("Choose a background: ");
+	m_chooseBackgroundText.setCharacterSize(56);
+	m_chooseBackgroundText.setFillColor(sf::Color::White);
+	m_chooseBackgroundText.setOutlineColor(sf::Color::Black);
+	m_chooseBackgroundText.setOutlineThickness(3.0f);
+	m_chooseBackgroundText.setPosition(Renderer::getInstance().getView().getSize().x / 3.3f,
 		Renderer::getInstance().getView().getSize().y / 11.5f);
 
-	Forest = new SelectIcon("StartingScreen/Forest.png");
-	Forest->setPosition(Renderer::getInstance().getView().getSize().x / 4.5f,
+	m_forest = new SelectIcon("StartingScreen/Forest.png");
+	m_forest->setPosition(Renderer::getInstance().getView().getSize().x / 4.5f,
 		Renderer::getInstance().getView().getSize().y / 4.0f);
-	Forest->setScale(0.7f, 0.7f);
+	m_forest->setScale(0.7f, 0.7f);
 
-	Mountain = new SelectIcon("StartingScreen/Mountain.png");
-	Mountain->setPosition(Renderer::getInstance().getView().getSize().x / 1.9f,
+	m_mountain = new SelectIcon("StartingScreen/Mountain.png");
+	m_mountain->setPosition(Renderer::getInstance().getView().getSize().x / 1.9f,
 		Renderer::getInstance().getView().getSize().y / 4.0f);
-	Mountain->setScale(0.7f, 0.7f);
+	m_mountain->setScale(0.7f, 0.7f);
 
-	Desert = new SelectIcon("StartingScreen/Desert.png");
-	Desert->setPosition(Renderer::getInstance().getView().getSize().x / 4.5f,
+	m_desert = new SelectIcon("StartingScreen/Desert.png");
+	m_desert->setPosition(Renderer::getInstance().getView().getSize().x / 4.5f,
 		Renderer::getInstance().getView().getSize().y / 1.7f);
-	Desert->setScale(0.7f, 0.7f);
+	m_desert->setScale(0.7f, 0.7f);
 
-	Waterfall = new SelectIcon("StartingScreen/Waterfall.png");
-	Waterfall->setPosition(Renderer::getInstance().getView().getSize().x / 1.9f,
+	m_waterfall = new SelectIcon("StartingScreen/Waterfall.png");
+	m_waterfall->setPosition(Renderer::getInstance().getView().getSize().x / 1.9f,
 		Renderer::getInstance().getView().getSize().y / 1.7f);
-	Waterfall->setScale(0.7f, 0.7f);
+	m_waterfall->setScale(0.7f, 0.7f);
 
 	InputManager::InputHandlerData tmp;
 	tmp.ActivationHandler = std::bind(&SelectionScreen::handleLeftMouseButtonClick, this, std::placeholders::_1);
@@ -85,33 +85,33 @@ SelectionScreen::~SelectionScreen()
 
 void SelectionScreen::destroyIcons()
 {
-	delete PinkMonster;
-	delete OwletMonster;
-	delete DudeMonster;
+	delete m_pinkMonster;
+	delete m_owletMonster;
+	delete m_dudeMonster;
 
-	delete Forest;
-	delete Mountain;
-	delete Desert;
-	delete Waterfall;
+	delete m_forest;
+	delete m_mountain;
+	delete m_desert;
+	delete m_waterfall;
 }
 
 void SelectionScreen::render()
 {
-	Renderer::getInstance().getWindow().draw(background);
+	Renderer::getInstance().getWindow().draw(m_background);
 	if (!heroSelectionComplete)
 	{
-		Renderer::getInstance().getWindow().draw(chooseHeroText);
-		PinkMonster->render();
-		OwletMonster->render();
-		DudeMonster->render();
+		Renderer::getInstance().getWindow().draw(m_chooseHeroText);
+		m_pinkMonster->render();
+		m_owletMonster->render();
+		m_dudeMonster->render();
 	}
 	else if (!backgroundSelectionComplete)
 	{
-		Renderer::getInstance().getWindow().draw(chooseBackgroundText);
-		Forest->render();
-		Mountain->render();
-		Desert->render();
-		Waterfall->render();
+		Renderer::getInstance().getWindow().draw(m_chooseBackgroundText);
+		m_forest->render();
+		m_mountain->render();
+		m_desert->render();
+		m_waterfall->render();
 	}
 }
 
@@ -127,21 +127,21 @@ void SelectionScreen::handleLeftMouseButtonReleased(float deltaTime)
 	{
 		makeBackgroundsHiddenFromClickDetection();
 		makeHeroesVisibleToClickDetection();
-		chosenHeroFilePath = std::string("Heroes/");
+		m_chosenHeroFilePath = std::string("Heroes/");
 
-		if (PinkMonster->containsPoint(worldPos))
+		if (m_pinkMonster->containsPoint(worldPos))
 		{
-			chosenHeroFilePath.append("PinkMonster/Pink_Monster.png");
+			m_chosenHeroFilePath.append("PinkMonster/Pink_Monster.png");
 			heroSelectionComplete = true;
 		}
-		else if (OwletMonster->containsPoint(worldPos))
+		else if (m_owletMonster->containsPoint(worldPos))
 		{
-			chosenHeroFilePath.append("OwletMonster/Owlet_Monster.png");
+			m_chosenHeroFilePath.append("OwletMonster/Owlet_Monster.png");
 			heroSelectionComplete = true;
 		}
-		else if (DudeMonster->containsPoint(worldPos))
+		else if (m_dudeMonster->containsPoint(worldPos))
 		{
-			chosenHeroFilePath.append("DudeMonster/Dude_Monster.png");
+			m_chosenHeroFilePath.append("DudeMonster/Dude_Monster.png");
 			heroSelectionComplete = true;
 		}
 		if (heroSelectionComplete)
@@ -156,28 +156,28 @@ void SelectionScreen::handleLeftMouseButtonReleased(float deltaTime)
 		std::string chosenBackgroundFilePath("Backgrounds/");
 		std::string platformTilePath("World/");
 
-		if (Forest->containsPoint(worldPos))
+		if (m_forest->containsPoint(worldPos))
 		{
 			chosenBackgroundFilePath.append("Forest");
 			platformTilePath.append("ForestPlatformTile.png");
 			layerNumber = 7;
 			backgroundSelectionComplete = true;
 		}
-		else if (Mountain->containsPoint(worldPos))
+		else if (m_mountain->containsPoint(worldPos))
 		{
 			chosenBackgroundFilePath.append("Mountain");
 			platformTilePath.append("MountainPlatformTile.png");
 			layerNumber = 7;
 			backgroundSelectionComplete = true;
 		}
-		else if (Desert->containsPoint(worldPos))
+		else if (m_desert->containsPoint(worldPos))
 		{
 			chosenBackgroundFilePath.append("Desert");
 			platformTilePath.append("DesertPlatformTile.png");
 			layerNumber = 9;
 			backgroundSelectionComplete = true;
 		}
-		else if (Waterfall->containsPoint(worldPos))
+		else if (m_waterfall->containsPoint(worldPos))
 		{
 			chosenBackgroundFilePath.append("Waterfall");
 			platformTilePath.append("WaterfallPlatformTile.png");
@@ -204,30 +204,30 @@ void SelectionScreen::removeInputHandlerFunctions()
 
 void SelectionScreen::makeHeroesHiddenFromClickDetection()
 {
-	PinkMonster->setHidden(true);
-	OwletMonster->setHidden(true);
-	DudeMonster->setHidden(true);
+	m_pinkMonster->setHidden(true);
+	m_owletMonster->setHidden(true);
+	m_dudeMonster->setHidden(true);
 }
 
 void SelectionScreen::makeBackgroundsHiddenFromClickDetection()
 {
-	Forest->setHidden(true);
-	Mountain->setHidden(true);
-	Waterfall->setHidden(true);
-	Desert->setHidden(true);
+	m_forest->setHidden(true);
+	m_mountain->setHidden(true);
+	m_waterfall->setHidden(true);
+	m_desert->setHidden(true);
 }
 
 void SelectionScreen::makeHeroesVisibleToClickDetection()
 {
-	PinkMonster->setHidden(false);
-	OwletMonster->setHidden(false);
-	DudeMonster->setHidden(false);
+	m_pinkMonster->setHidden(false);
+	m_owletMonster->setHidden(false);
+	m_dudeMonster->setHidden(false);
 }
 
 void SelectionScreen::makeBackgroundsVisibleToClickDetection()
 {
-	Forest->setHidden(false);
-	Mountain->setHidden(false);
-	Waterfall->setHidden(false);
-	Desert->setHidden(false);
+	m_forest->setHidden(false);
+	m_mountain->setHidden(false);
+	m_waterfall->setHidden(false);
+	m_desert->setHidden(false);
 }

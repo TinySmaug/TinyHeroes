@@ -14,6 +14,6 @@ public:
 	void update(float deltaTime);
 
 public:
-	std::vector<BackgroundElement*> background;
+	std::vector<BackgroundElement*> m_background;
 };
 
