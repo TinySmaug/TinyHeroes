@@ -1,8 +1,6 @@
 #include "Renderer.h"
 #include "RenderableObject.h"
 #include <algorithm>
-#include "Background.h" //remove after fixing outOfView
-#include "Entity.h"  //remove after fixing outOfView
 
 Renderer::Renderer() 
 {

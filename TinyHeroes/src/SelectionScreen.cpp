@@ -2,7 +2,6 @@
 #include "Renderer.h"
 #include "Background.h"
 #include "InputManager.h"
-#include "Renderer.h"
 #include "Platform.h"
 
 

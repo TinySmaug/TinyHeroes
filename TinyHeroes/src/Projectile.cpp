@@ -1,6 +1,5 @@
 #include "Projectile.h"
 #include "Renderer.h"
-#include "PlayerCharacter.h"
 #include "Enemy.h"
 
 Projectile::Projectile(std::string texturePath, int depth, float kineticEnergy, sf::Vector2f position, bool faceRight)

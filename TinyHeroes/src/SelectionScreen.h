@@ -1,7 +1,6 @@
 #pragma once
 #include "SelectIcon.h"
 
-class Background;
 
 class SelectionScreen
 {

@@ -1,6 +1,5 @@
 #include "Entity.h"
 #include "Renderer.h"
-#include "WorldInstance.h"
 #include "CollisionEngine.h"
 
 Entity::Entity(std::string texturePath, int depth)

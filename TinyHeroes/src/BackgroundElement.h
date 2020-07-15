@@ -1,9 +1,7 @@
 #pragma once
-
 #include "RenderableObject.h"
 
 class BackgroundElement 
-
 {
 public:
 	BackgroundElement(std::string file);
