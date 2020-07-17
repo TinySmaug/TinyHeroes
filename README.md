@@ -2,9 +2,13 @@
 Decided to dive into game dev so I started from scratch with SFML. This is a basic looking 2D platformer which I'm probably going to keep on slowly upgrading as a pastime and I hope someone might find it entertaining/useful. 
 
 ##### Table of Contents  
-1. [Setup](#computer-setup)  
-2. [UML representation](#memo-uml-representation)
-3. [Sample](#shipit-sample)
+- [Sample](#shipit-sample)
+- [Setup](#computer-setup)  
+- [Controls](#joystick-controls)
+- [UML representation](#memo-uml-representation)
+
+## :shipit: Sample
+![](Images/sample.gif)
 
 ## :computer: Setup 
 The project was made on Windows using Visual Studio so I will write a detailed setup for that.
@@ -30,8 +34,15 @@ For the debug version just add -d (e.g. sfml-system-d.lib).
 6. Run the program.
 7. Have fun! :)
 
+## :joystick: Controls
+| Key | Action |
+| --- | --- |
+| A | Walk left |
+| D | Walk right |
+| Shift | Run |
+| Space | Jump |
+| Left mouse button | Throw rock |
+| Right mouse button | Punch |
+
 ## :memo: UML representation
 ![](Images/uml.png)
-
-## :shipit: Sample
-![](Images/sample.gif)
