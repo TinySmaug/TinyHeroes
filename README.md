@@ -3,13 +3,13 @@ Decided to dive into game dev so I started from scratch with SFML. This is a bas
 
 ##### Table of Contents  
 1. [Setup](#computer-setup)  
-2. [UML representation](#uml-representation)
-3. [Sample](#sample)
+2. [UML representation](#memo-uml-representation)
+3. [Sample](#shipit-sample)
 
 ## :computer: Setup 
 The project was made on Windows using Visual Studio so I will write a detailed setup for that.
 
-* Install SFML library by downloading the SDK from the [download page](https://www.sfml-dev.org/download.php), unpack it and copy the files to your preferred location. (or just use the one in the repository)
+* Install SFML library by downloading the SDK from the [download page](https://www.sfml-dev.org/download.php), unpack it and copy the files to your preferred location.  
 
 1. Download (clone) this repository
 2. Open the solution using Visual Studio
@@ -30,8 +30,8 @@ For the debug version just add -d (e.g. sfml-system-d.lib).
 6. Run the program.
 7. Have fun! :)
 
-## UML representation
+## :memo: UML representation
 ![](Images/uml.png)
 
-## Sample
+## :shipit: Sample
 ![](Images/sample.gif)
