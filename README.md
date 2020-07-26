@@ -30,7 +30,7 @@ The project was made on Windows using Visual Studio so I will write a detailed s
 For the debug version just add -d (e.g. sfml-system-d.lib).  
 *Note: You don't need all 5 for this particular project.*
 4. Build the solution.
-5. If you get an error saying "sfml-system-d-2.dll is missing", just copy all *-d-2.dll files from your sfml\bin directory and paste them to the projects Debug folder.
+5. If you get an error saying "*.dll is missing", just copy the *.dll files from your sfml\bin directory and paste them to the same directory as your executable.
 6. Run the program.
 7. Have fun! :)
 
